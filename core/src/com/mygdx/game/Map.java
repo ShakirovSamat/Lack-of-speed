@@ -12,17 +12,16 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 
 
-public class WayPath implements Screen, InputProcessor {
+public class Map implements Screen, InputProcessor {
     final Main game;
-    Texture first, second;
+    Texture map;
     OrthographicCamera camera;
     float w, h;
 
-    public WayPath(final Main game) {
+    public Map(final Main game) {
         this.game = game;
         w = Gdx.graphics.getWidth();
-        first = new Texture(Gdx.files.internal("race_game/first.png"));
-        second = new Texture(Gdx.files.internal("race_game/second.png"));
+        map = new Texture(Gdx.files.internal("Map/map.png"));
         h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(1280,1280 * (h / w));
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
@@ -36,8 +35,7 @@ public class WayPath implements Screen, InputProcessor {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(second,0,0,w,h);
-        game.batch.draw(first, 0, 0, w, h);
+        game.batch.draw(map,0,0,w,h);
         game.batch.end();
     }
 

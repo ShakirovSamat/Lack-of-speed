@@ -1,12 +1,9 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
-import java.awt.Font;
 
 
 public class Menu {
@@ -87,7 +84,7 @@ public class Menu {
                         game.setScreen(new RaceGame(game, 400, playerCar, enemyCar));
                         break;
                      case "Ok":
-                         game.setScreen(new WayPath(game));
+                         game.setScreen(new Map(game));
                          break;
 
                 }

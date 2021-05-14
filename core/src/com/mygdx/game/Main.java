@@ -25,7 +25,7 @@ public class Main extends Game {
         font_speed = generator.generateFont(parameter);
         parameter.size = 35;
         font_trans = generator.generateFont(parameter);
-        this.setScreen(new WayPath(this));
+        this.setScreen(new Map(this));
     }
 
     @Override
