@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
@@ -14,14 +15,22 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Map implements Screen, InputProcessor {
     final Main game;
-    Texture map;
+    Texture map, icon_store, icon_garage, icon_race;
     OrthographicCamera camera;
     float w, h;
+
+    Icon store, garage, race;
 
     public Map(final Main game) {
         this.game = game;
         w = Gdx.graphics.getWidth();
         map = new Texture(Gdx.files.internal("Map/map.png"));
+        icon_store = new Texture(Gdx.files.internal("Map/icon_store.png"));
+        icon_garage = new Texture(Gdx.files.internal("Map/icon_garage.png"));
+        icon_race = new Texture(Gdx.files.internal("Map/icon_race.png"));
+        store = new Icon(50,50, 1150,400, "Store", icon_store);
+        garage = new Icon(50,50, 800,600, "Garage", icon_garage);
+        race = new Icon(50,50, 150,380, "Race", icon_race);
         h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(1280,1280 * (h / w));
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
@@ -36,7 +45,15 @@ public class Map implements Screen, InputProcessor {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(map,0,0,w,h);
+        store.draw(game.batch);
+        garage.draw(game.batch);
+        race.draw(game.batch);
         game.batch.end();
+        if(Gdx.input.isTouched()){
+            store.onClick();
+            race.onClick();
+            garage.onClick();
+        }
     }
 
     @Override
@@ -85,14 +102,6 @@ public class Map implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(screenX < w /2){
-            game.setScreen(new CardGame(game));
-        }
-        else{
-            game.setScreen(new RaceGame(game, 400, (PlayerCar)loadCar("race_game/data/main.txt" , 0), (EnemyCar)loadCar("race_game/data/samat.txt", 1)));
-
-        }
-        dispose();
         return false;
     }
 
@@ -142,7 +151,47 @@ public class Map implements Screen, InputProcessor {
         }
     }
 
+    class Icon{
+        public int width;
+        public int height;
+        public int xPosition;
+        public int yPosition;
+        public String name;
+        public Texture texture;
 
+        public Icon(int width, int height, int xPosition, int yPosition, String name, Texture texture) {
+            this.width = width;
+            this.height = height;
+            this.xPosition = xPosition;
+            this.yPosition = yPosition;
+            this.name = name;
+            this.texture = texture;
+        }
+
+
+        public void draw(Batch batch){
+            batch.draw(texture,xPosition,yPosition,width,height);
+        }
+
+        public void onClick(){
+            float x  = Gdx.input.getX();
+            float y  = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
+            if(xPosition <= x && x <= xPosition + width
+                    && yPosition <= y && y <= yPosition + height){
+                switch(name){
+                    case "Race":
+                        game.setScreen(new RaceGame(game, 400, (PlayerCar)loadCar("race_game/data/main.txt" , 0), (EnemyCar)loadCar("race_game/data/samat.txt", 1)));
+                        break;
+                    case "Store":
+                        game.setScreen(new CardGame(game));
+                        break;
+                    case "Garage":
+                        break;
+                }
+            }
+
+        }
+    }
 }
 
 

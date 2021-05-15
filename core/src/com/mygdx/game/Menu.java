@@ -9,16 +9,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 public class Menu {
 
     // Sizes
-    private int width;
-    private int height;
-    private int xPosition;
-    private int yPosition;
+    int width;
+    int height;
+    int xPosition;
+    int yPosition;
 
     // Data
     String[] results;
 
     //Graphic
-    Texture background, button;
+    Texture background;
+    static Texture button;
 
     //Buttons
     Button restart, ok;
@@ -34,6 +35,19 @@ public class Menu {
         restart = new Button(170,50,xPosition + 70, yPosition + 40, "Restart");
         ok = new Button(170,50, xPosition + width - 70 - 170,yPosition + 40, "Ok");
     }
+    public Menu(int width, int height, String[] results, Button restart, Button ok) {
+        this.width = width;
+        this.height = height;
+        this.results = results;
+        xPosition = (int)(RaceGame.SCREEN_WIDTH / 2 - width / 2);
+        yPosition = (int)(RaceGame.SCREEN_HEIGHT / 2 - height / 2);
+        background = new Texture(Gdx.files.internal("menu_background.png"));
+        button = new Texture(Gdx.files.internal("button.png"));
+        this.restart = restart;
+        this.ok = ok;
+//        this.restart = new Button(170,50,xPosition + 70, yPosition + 40, "Restart");
+//        this.ok = new Button(170,50, xPosition + width - 70 - 170,yPosition + 40, "Ok");
+    }
 
     public void draw(Batch batch, BitmapFont font, BitmapFont font2){
         batch.draw(background,xPosition,yPosition,width,height);
@@ -45,7 +59,9 @@ public class Menu {
         }
     }
 
-    class Button{
+
+
+     static class Button{
         private int width;
         private int height;
         private int xPosition;
@@ -62,7 +78,7 @@ public class Menu {
 
         public void draw(Batch batch, BitmapFont font){
             batch.draw(button,xPosition,yPosition,width,height);
-            font.draw(batch,hint,xPosition + (int)((width / 2) + 30), yPosition + 35);
+            font.draw(batch,hint,xPosition + 15, yPosition + 35);
         }
 
         public void isTouched(Main game, float x, float y, PlayerCar playerCar, EnemyCar enemyCar){
@@ -83,9 +99,9 @@ public class Menu {
                         enemyCar.curSpeed = 0;
                         game.setScreen(new RaceGame(game, 400, playerCar, enemyCar));
                         break;
-                     case "Ok":
-                         game.setScreen(new Map(game));
-                         break;
+                    case "Ok":
+                        game.setScreen(new Map(game));
+                        break;
 
                 }
             }

@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.text.DecimalFormat;
+
 
 public class CardGame implements InputProcessor, Screen {
 	Main game;
@@ -25,11 +27,16 @@ public class CardGame implements InputProcessor, Screen {
 	// Cards logic
 	Deck deck;
 
+	//Menu
+	Menu menu;
+
 	// Other
 	final float SCREEN_WIDTH;
 	final float SCREEN_HEIGHT;
 	long timeLock;
 	int score;
+	float time;
+	boolean isOver;
 
 
 	public Animation<TextureRegion> getAnimation(int c, int r, String path){
@@ -51,6 +58,10 @@ public class CardGame implements InputProcessor, Screen {
 
 		SCREEN_WIDTH = Gdx.graphics.getWidth();
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+
+		time = 0;
+		isOver = false;
 
 
 		hammer_flip = getAnimation(5,4,"card_game/animations/hammer_flip.png");
@@ -88,6 +99,27 @@ public class CardGame implements InputProcessor, Screen {
 		camera.update();
 		game.batch.setProjectionMatrix(camera.combined);
 
+		if(time >= 10 && !isOver){
+			String[] results = new String[1];
+			results[0] = "Score: " + score + " points";
+			menu = new Menu(600,400, results, res, ok);
+			Menu.Button res = new Menu.Button(170,50,menu.xPosition + 70, menu.yPosition + 40, "Restart"){
+				@Override
+				public void isTouched(Main game, float x, float y, PlayerCar playerCar, EnemyCar enemyCar) {
+					score = 1000;
+				}
+			};
+			Menu.Button ok = new Menu.Button(170,50, menu.xPosition + menu.width - 70 - 170,menu.yPosition + 40, "Ok"){
+				@Override
+				public void isTouched(Main game, float x, float y, PlayerCar playerCar, EnemyCar enemyCar) {
+					score = 1000;
+				}
+			};
+			isOver = true;
+		}
+		else if(isOver){
+
+		}
 		if(deck.getAmountOfCards() == deck.completed){
 			deck.sortCards();
 		}
@@ -194,11 +226,13 @@ public class CardGame implements InputProcessor, Screen {
 			if(!card.isAnimating()){
 				game.batch.draw(texture,card.getX(), card.getY(), deck.getCards_width(), deck.getCards_height());
 			}
-
-
+		if(menu != null){
+			menu.draw(game.batch, game.font_speed, game.font_trans);
+		}
 
 		}
 		game.batch.end();
+		time += Gdx.graphics.getDeltaTime();
         }
 
 
