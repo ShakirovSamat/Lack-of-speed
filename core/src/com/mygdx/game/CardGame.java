@@ -4,7 +4,10 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,9 +15,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.text.DecimalFormat;
+import java.text.Format;
+
 
 public class CardGame implements InputProcessor, Screen {
 	Main game;
+
 
 	// Graphic
 	OrthographicCamera camera;
@@ -25,11 +32,19 @@ public class CardGame implements InputProcessor, Screen {
 	// Cards logic
 	Deck deck;
 
+	//Data
+	Preferences prefs;
+
+	//Menu
+	Menu menu;
+
 	// Other
 	final float SCREEN_WIDTH;
 	final float SCREEN_HEIGHT;
 	long timeLock;
 	int score;
+	float time;
+	boolean isOver;
 
 
 	public Animation<TextureRegion> getAnimation(int c, int r, String path){
@@ -48,9 +63,13 @@ public class CardGame implements InputProcessor, Screen {
 
 	public CardGame(Main game) {
 		this.game = game;
+		game.font_trans.setColor(Color.BLACK);
 
 		SCREEN_WIDTH = Gdx.graphics.getWidth();
 		SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+		time = 0;
+		isOver = false;
 
 
 		hammer_flip = getAnimation(5,4,"card_game/animations/hammer_flip.png");
@@ -77,6 +96,7 @@ public class CardGame implements InputProcessor, Screen {
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
 		camera.update();
 
+		prefs = Gdx.app.getPreferences("data");
 
 		Gdx.input.setInputProcessor(this);
 
@@ -88,6 +108,25 @@ public class CardGame implements InputProcessor, Screen {
 		camera.update();
 		game.batch.setProjectionMatrix(camera.combined);
 
+		if(time >= 7 && !isOver){
+			int money = score * (50 + (int)(Math.random() * 100));
+
+			prefs.putInteger("money",prefs.getInteger("money",0) + money);
+			prefs.flush();
+
+			String[] results = new String[2];
+			results[0] = "Score is " + score + " points";
+			results[1] = "Money earned " + money + " rubles";
+			menu = new Menu(800,400, results);
+
+			deck.ended = true;
+			for(int i = 0; i < deck.getAmountOfCards(); i++){
+				deck.getCard(i).setPressed(true);
+			}
+
+			isOver = true;
+		}
+
 		if(deck.getAmountOfCards() == deck.completed){
 			deck.sortCards();
 		}
@@ -96,7 +135,7 @@ public class CardGame implements InputProcessor, Screen {
 		game.batch.begin();
 
 		for(int i = 0; i < deck.getAmountOfCards(); i++){
-		    Texture texture = ordinary_card;
+			Texture texture = ordinary_card;
 			Deck.Card card = deck.getCard(i);
 
 			if(deck.checkIsSame(timeLock)){
@@ -165,7 +204,7 @@ public class CardGame implements InputProcessor, Screen {
 				card.stateTime += Gdx.graphics.getDeltaTime();
 			}
 
-			if(card.isPressed() || card.isComplete && !card.isAnimating()){
+			if(!deck.ended && card.isPressed() || card.isComplete && !card.isAnimating()){
 				switch (card.getType()){
 					case 0:
 						texture = hammer_card;
@@ -194,12 +233,19 @@ public class CardGame implements InputProcessor, Screen {
 			if(!card.isAnimating()){
 				game.batch.draw(texture,card.getX(), card.getY(), deck.getCards_width(), deck.getCards_height());
 			}
-
-
+			if(menu != null){
+				menu.draw(game.batch, game.font_speed, game.font_trans);
+			}
 
 		}
+		game.font_trans.draw(game.batch,"Score: " + score,50,650);
+		String str = new DecimalFormat("#0.0").format(time);
+		game.font_trans.draw(game.batch,"Time: " + str,50,575);
 		game.batch.end();
-        }
+		if(!isOver){
+			time += Gdx.graphics.getDeltaTime();
+		}
+	}
 
 
 	@Override
@@ -250,6 +296,14 @@ public class CardGame implements InputProcessor, Screen {
 			float x = screenX / (SCREEN_WIDTH / 1280);
 			float y = Math.abs(screenY / (SCREEN_HEIGHT / (1280 * (SCREEN_HEIGHT / SCREEN_WIDTH))) - 1280 * (SCREEN_HEIGHT / SCREEN_WIDTH));
 
+			if(menu != null){
+				if(menu.ok.isTouched(game,x,y)){
+					dispose();
+				}
+				if(menu.restart.isTouched(game,x,y)){
+					dispose();
+				}
+			}
 			for (int i = 0; i < deck.getAmountOfCards(); i++) {
 				Deck.Card card = deck.getCard(i);
 				if (!card.isPressed() &&  !card.isComplete && card.getX() - 1 < x && x < 1 + card.getX() + deck.getCards_width()

@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -56,6 +57,8 @@ public class RaceGame implements Screen, InputProcessor {
         this.enemyCar = enemyCar;
         landscape = new Landscape();
         ui = new UI();
+
+        game.font_trans.setColor(Color.WHITE);
 
         cube_appearance = getAnimation(4,2, "race_game/animations/cube_appearance.png", 16f);
         cube_first = getAnimation(4,4,"race_game/animations/cube_first.png", 30f);

@@ -8,6 +8,7 @@ public class Deck {
        final private int cards_height;
        private int size;
        public int opened;
+       boolean ended;
        int completed;
        Random random = new Random();
        private int type;
@@ -19,6 +20,7 @@ public class Deck {
         this.cards_height = cards_height;
         opened = 0;
         completed = 0;
+        ended = false;
 
     }
 
