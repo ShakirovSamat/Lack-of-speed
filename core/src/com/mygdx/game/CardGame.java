@@ -102,19 +102,7 @@ public class CardGame implements InputProcessor, Screen {
 		if(time >= 10 && !isOver){
 			String[] results = new String[1];
 			results[0] = "Score: " + score + " points";
-			menu = new Menu(600,400, results, res, ok);
-			Menu.Button res = new Menu.Button(170,50,menu.xPosition + 70, menu.yPosition + 40, "Restart"){
-				@Override
-				public void isTouched(Main game, float x, float y, PlayerCar playerCar, EnemyCar enemyCar) {
-					score = 1000;
-				}
-			};
-			Menu.Button ok = new Menu.Button(170,50, menu.xPosition + menu.width - 70 - 170,menu.yPosition + 40, "Ok"){
-				@Override
-				public void isTouched(Main game, float x, float y, PlayerCar playerCar, EnemyCar enemyCar) {
-					score = 1000;
-				}
-			};
+
 			isOver = true;
 		}
 		else if(isOver){

@@ -8,6 +8,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
@@ -19,7 +20,9 @@ public class Map implements Screen, InputProcessor {
     OrthographicCamera camera;
     float w, h;
 
-    Icon store, garage, race;
+    Upgrade_menu upgrade_menu;
+
+    Icon store, garage, race, improving;
 
     public Map(final Main game) {
         this.game = game;
@@ -31,11 +34,14 @@ public class Map implements Screen, InputProcessor {
         store = new Icon(50,50, 1150,400, "Store", icon_store);
         garage = new Icon(50,50, 800,600, "Garage", icon_garage);
         race = new Icon(50,50, 150,380, "Race", icon_race);
+        improving = new Icon(80,80,100,50,"Improving",icon_garage);
         h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera(1280,1280 * (h / w));
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
         camera.update();
         Gdx.input.setInputProcessor(this);
+
+        upgrade_menu = new Upgrade_menu(580,470,(int)(w - 580) / 2, (int)(h - 470) / 2);
     }
 
     @Override
@@ -48,12 +54,11 @@ public class Map implements Screen, InputProcessor {
         store.draw(game.batch);
         garage.draw(game.batch);
         race.draw(game.batch);
-        game.batch.end();
-        if(Gdx.input.isTouched()){
-            store.onClick();
-            race.onClick();
-            garage.onClick();
+        improving.draw(game.batch);
+        if(upgrade_menu.opened){
+            upgrade_menu.draw(game.batch, game.font_trans);
         }
+        game.batch.end();
     }
 
     @Override
@@ -102,6 +107,16 @@ public class Map implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        float x  = Gdx.input.getX();
+        float y  = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
+        store.onClick();
+        race.onClick();
+        garage.onClick();
+        improving.onClick();
+        for(int i = 0; i < upgrade_menu.buttons.length; i++){
+            upgrade_menu.buttons[i].onClick();
+        }
+
         return false;
     }
 
@@ -187,6 +202,8 @@ public class Map implements Screen, InputProcessor {
                         break;
                     case "Garage":
                         break;
+                    case "Improving":
+                        upgrade_menu.opened = !upgrade_menu.opened;
                 }
             }
 
