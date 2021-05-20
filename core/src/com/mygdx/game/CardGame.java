@@ -108,7 +108,7 @@ public class CardGame implements InputProcessor, Screen {
 		camera.update();
 		game.batch.setProjectionMatrix(camera.combined);
 
-		if(time >= 7 && !isOver){
+		if(time >= 60 && !isOver){
 			int money = score * (50 + (int)(Math.random() * 100));
 
 			prefs.putInteger("money",prefs.getInteger("money",0) + money);

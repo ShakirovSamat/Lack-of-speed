@@ -16,11 +16,13 @@ public class Garage implements Screen, InputProcessor {
 
     Main game;
 
-    Texture background, icon_map;
+    Texture background, icon_map, icon_upgrade;
 
     float w, h;
 
-    Icon map;
+    Icon map, upgrade;
+
+    Upgrade_menu upgrade_menu;
 
     OrthographicCamera camera;
 
@@ -34,6 +36,11 @@ public class Garage implements Screen, InputProcessor {
 
         background = new Texture(Gdx.files.internal("garage/background.png"));
         icon_map = new Texture(Gdx.files.internal("garage/icon_map.png"));
+        icon_upgrade = new Texture(Gdx.files.internal("garage/icon_upgrade.png"));
+
+        upgrade = new Icon(100,100,30,30,"Upgrade",icon_upgrade);
+
+        upgrade_menu = new Upgrade_menu(580,470,(int)(w - 580) / 2, (int)(h - 470) / 2);
 
         map = new Icon(80,110,1180,20,"Map",icon_map);
 
@@ -57,6 +64,11 @@ public class Garage implements Screen, InputProcessor {
         game.batch.draw(background,0,0,w,h);
 
         map.draw(game.batch);
+        upgrade.draw(game.batch);
+
+        if(upgrade_menu.opened){
+            upgrade_menu.draw(game.batch, game.font_trans);
+        }
 
         game.batch.end();
         if(Gdx.input.isTouched()){
@@ -115,6 +127,15 @@ public class Garage implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(upgrade.onClick(game)){
+            upgrade_menu.opened = !upgrade_menu.opened;
+        }
+        map.onClick(game);
+        if(upgrade_menu.opened){
+            for(int i = 0; i < upgrade_menu.buttons.length; i++){
+                upgrade_menu.buttons[i].onClick();
+            }
+        }
         return false;
     }
 
