@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class PlayerCar extends Car{
 
-    public PlayerCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, float[] speeds,  int weight, String bodyPath, String wheelPath) {
-        super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, speeds, weight, bodyPath, wheelPath);
+    public PlayerCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed,  int weight, String bodyPath, String wheelPath) {
+        super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
     }
 
 

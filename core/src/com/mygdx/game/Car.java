@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
     int weight;
     int transmissions;
     int[] speedChange;
-    float[] speeds;
     int maxSpeed;
     public float curSpeed;
     public int curTransmission;
@@ -33,14 +32,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
     //Graphic
     Sprite body, wheel;
 
-    public Car(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, float[] speeds, int weight, String bodyPath, String wheelPath){
+    public Car(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath){
         this.width = width;
         this.height = height;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.transmissions = transmissions;
         this.speedChange = speedChange;
-        this.speeds = speeds;
         this.weight = weight;
         this.maxSpeed = maxSpeed;
         curSpeed = 0;
@@ -64,39 +62,47 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
                  switch (curTransmission) {
                      case 1:
                          if (curSpeed <= speedChange[0]) {
-                             curSpeed += speeds[0];
+                             curSpeed += (maxSpeed - curSpeed) / 100 - (speedChange[0] - curSpeed) * 0.005;
                          } else {
-                             curSpeed += weight * 0.00008;
+                             curSpeed += (maxSpeed - curSpeed) / 100 - (curSpeed - speedChange[0]) * 0.06;
                          }
                          break;
                      case 2:
                          if (curSpeed <= speedChange[1]) {
-                             curSpeed += speeds[1] - (2 - curTransmission) * 0.2;
+                             curSpeed += 0.1 + (maxSpeed - curSpeed) / 100 - (speedChange[1] - curSpeed) * 0.005;
                          } else {
-                             curSpeed += weight * 0.00008;
+                             curSpeed += (maxSpeed - curSpeed) / 100 - (curSpeed - speedChange[1]) * 0.06;
                          }
                          break;
                      case 3:
                          if (curSpeed <= speedChange[2]) {
-                             curSpeed += speeds[2] - (3 - curTransmission) * 0.1;
+                             curSpeed += 0.2 + (maxSpeed - curSpeed) / 100 - (speedChange[2] - curSpeed) * 0.005;
                          } else {
-                             curSpeed += weight * 0.00008;
+                             curSpeed += (maxSpeed - curSpeed) / 100 - (curSpeed - speedChange[2]) * 0.06;
+                         }
+                         if(speedChange[curTransmission - 2] - curSpeed < 0){
+                             curSpeed -= (speedChange[curTransmission - 2] - curSpeed) * 0.01;
                          }
                          break;
                      case 4:
                          if (curSpeed <= speedChange[3]) {
-                             curSpeed +=speeds[3] - (4 - curTransmission) * 0.07;
+                             curSpeed += 0.3 + (maxSpeed - curSpeed) / 100 - (speedChange[3] - curSpeed) * 0.005;
                          } else {
-                             curSpeed += weight * 0.00008;
+                             curSpeed += (maxSpeed - curSpeed) / 100 - (curSpeed - speedChange[3]) * 0.06;
                          }
+
                          break;
                      case 5:
                          if(curSpeed <= maxSpeed) {
-                             curSpeed += speeds[4] - (5 - curTransmission) * 0.07;
+                             curSpeed += 0.4 + (maxSpeed - curSpeed) / 100 - (maxSpeed - curSpeed) * 0.005;
                          } else {
-                             curSpeed += weight * 0.00008;
+                             curSpeed += (maxSpeed - curSpeed) / 100 - (curSpeed - maxSpeed) * 0.06;
                          }
+
                          break;
+                 }
+                 if(curTransmission != 1 && speedChange[curTransmission - 2] - curSpeed > 0){
+                     curSpeed -= (speedChange[curTransmission - 2] - curSpeed) * 0.008;
                  }
                  timeLock = System.currentTimeMillis() + 40;
              }

@@ -8,8 +8,8 @@ public class EnemyCar extends Car{
     int nextChange;
     Random random;
     long waitLock;
-    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, float[] speeds, int weight, String bodyPath, String wheelPath) {
-        super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, speeds, weight, bodyPath, wheelPath);
+    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath) {
+        super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
         random = new Random();
         waitLock = 0;
         this.speedChange = speedChange;

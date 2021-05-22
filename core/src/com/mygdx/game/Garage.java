@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,8 +25,10 @@ public class Garage implements Screen, InputProcessor {
 
     Upgrade_menu upgrade_menu;
 
-    OrthographicCamera camera;
+    //Data
+    Preferences prefs;
 
+    OrthographicCamera camera;
 
 
     public Garage(Main game) {
@@ -38,19 +41,21 @@ public class Garage implements Screen, InputProcessor {
         icon_map = new Texture(Gdx.files.internal("garage/icon_map.png"));
         icon_upgrade = new Texture(Gdx.files.internal("garage/icon_upgrade.png"));
 
-        upgrade = new Icon(100,100,30,30,"Upgrade",icon_upgrade);
+        upgrade = new Icon(100, 100, 30, 30, "Upgrade", icon_upgrade);
 
-        upgrade_menu = new Upgrade_menu(580,470,(int)(w - 580) / 2, (int)(h - 470) / 2);
+        upgrade_menu = new Upgrade_menu(696, 564, (int) (w - 696) / 2, (int) (h - 564) / 2);
 
-        map = new Icon(80,110,1180,20,"Map",icon_map);
+        map = new Icon(80, 110, 1180, 20, "Map", icon_map);
 
-        camera = new OrthographicCamera(1280,1280 * (h / w));
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
+        prefs = Gdx.app.getPreferences("data");
+
+
+        camera = new OrthographicCamera(1280, 1280 * (h / w));
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
 
         Gdx.input.setInputProcessor(this);
     }
-
 
 
     @Override
@@ -61,22 +66,21 @@ public class Garage implements Screen, InputProcessor {
 
 
         game.batch.begin();
-        game.batch.draw(background,0,0,w,h);
+        game.batch.draw(background, 0, 0, w, h);
 
         map.draw(game.batch);
         upgrade.draw(game.batch);
 
-        if(upgrade_menu.opened){
+        if (upgrade_menu.opened) {
             upgrade_menu.draw(game.batch, game.font_trans);
         }
 
         game.batch.end();
-        if(Gdx.input.isTouched()){
+        if (Gdx.input.isTouched()) {
             map.onClick(game);
 
         }
     }
-
 
 
     @Override
@@ -127,13 +131,16 @@ public class Garage implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(upgrade.onClick(game)){
+        float x = Gdx.input.getX();
+        float y = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
+
+        if (upgrade.onClick(game)) {
             upgrade_menu.opened = !upgrade_menu.opened;
         }
         map.onClick(game);
-        if(upgrade_menu.opened){
-            for(int i = 0; i < upgrade_menu.buttons.length; i++){
-                upgrade_menu.buttons[i].onClick();
+        if (upgrade_menu.opened) {
+            for (int i = 0; i < upgrade_menu.buttons.length; i++) {
+                upgrade_menu.buttons[i].isTouched(x,y);
             }
         }
         return false;
@@ -158,4 +165,5 @@ public class Garage implements Screen, InputProcessor {
     public boolean scrolled(float amountX, float amountY) {
         return false;
     }
+
 }
