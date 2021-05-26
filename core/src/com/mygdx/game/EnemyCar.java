@@ -16,7 +16,8 @@ public class EnemyCar extends Car{
         random = new Random();
         waitLock = 0;
         this.speedChange = speedChange;
-        nextChange = speedChange[0] - 10 + random.nextInt(15);
+        nextChange = speedChange[0] - (10 + random.nextInt(15));
+        wheel.setScale(0.3f);
     }
 
 

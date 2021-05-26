@@ -23,7 +23,7 @@ public class Icon extends Unit{
     }
 
 
-    public boolean isClicked(int x, int y){
+    public boolean isClicked(float x, float y){
         return xPosition <= x && x <= xPosition + width
                 && yPosition <= y && y <= yPosition + height;
     }
@@ -49,7 +49,7 @@ public class Icon extends Unit{
         }
 
 
-        return new EnemyCar(487,126,300,120, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath, new int[]{0,0},new int[]{0,0});
+        return new EnemyCar(455,157,310,120, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath, new int[]{0,0},new int[]{0,0});
 
     }
     public static PlayerCar loadPlayerCar(){

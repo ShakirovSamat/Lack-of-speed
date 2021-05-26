@@ -126,16 +126,18 @@ public class Garage implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        screenY = 720 - screenY;
-        if (mIcon.isClicked(screenX, screenY)) mIcon.onClick(game);
+        float deltaWidth1280 = Gdx.graphics.getWidth() / 1280f;
+        float x = screenX / deltaWidth1280;
+        float y = Gdx.graphics.getHeight() - screenY;
+        if (mIcon.isClicked(x, y)) mIcon.onClick(game);
 
-        if(uIcon.isClicked(screenX, screenY)){
+        if(uIcon.isClicked(x, y)){
             uIcon.onClick();
         }
 
         if (uIcon.upgrade_menu.opened){
             for(int i = 0; i < uIcon.upgrade_menu.buttons.length; i++){
-                uIcon.upgrade_menu.buttons[i].isTouched(screenX, screenY);
+                uIcon.upgrade_menu.buttons[i].isTouched(x, y);
             }
         }
 

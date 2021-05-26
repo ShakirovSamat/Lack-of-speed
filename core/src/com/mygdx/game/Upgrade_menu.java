@@ -92,7 +92,7 @@ public class Upgrade_menu extends  Unit {
             }
 
         }
-        public void isTouched(int x, int y){
+        public void isTouched(float x, float y){
 
             if( timeLock <= System.currentTimeMillis() && xPosition <= x && x <= xPosition + width
                     && yPosition <= y && y <= yPosition + height) {

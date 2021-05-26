@@ -74,7 +74,7 @@ public class Map implements Screen, InputProcessor {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(map,0,0,w,h);
+        game.batch.draw(map,0,0,1280,720);
         game.font_trans.draw(game.batch, money + " rubles", 1050,680);
 
         gIcon.draw(game.batch);
@@ -131,7 +131,9 @@ public class Map implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        screenY = 720 - screenY;
+        float deltaWidth1280 = Gdx.graphics.getWidth() / 1280f;
+        float x = screenX / deltaWidth1280;
+        float y = Gdx.graphics.getHeight() - screenY;
         if(rIcon.additionalMenu.opened){
             rIcon.additionalMenu.start.isTouched(game);
             rIcon.additionalMenu.close();
@@ -145,16 +147,16 @@ public class Map implements Screen, InputProcessor {
             tIcon.additionalMenu.close();
         }
 
-        if(rIcon.isClicked(screenX, screenY)){
+        if(rIcon.isClicked(x, y)){
             rIcon.onClick();
         }
-        if(gIcon.isClicked(screenX, screenY)){
+        if(gIcon.isClicked(x, y)){
             gIcon.onClick(game);
         }
-        if(sIcon.isClicked(screenX, screenY)){
+        if(sIcon.isClicked(x, y)){
             sIcon.onClick();
         }
-        if(tIcon.isClicked(screenX, screenY)){
+        if(tIcon.isClicked(x, y)){
             tIcon.onClick();
         }
 

@@ -164,9 +164,10 @@ public class RaceGame implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float x = screenX;
-        float y = SCREEN_HEIGHT - screenY;
-        ui.checkTouchTransmissions(x,y,playerCar);
+        float deltaWidth1280 = Gdx.graphics.getWidth() / 1280f;
+        float x = screenX / deltaWidth1280;
+        float y = Gdx.graphics.getHeight() - screenY;
+        ui.checkTouchTransmissions(x, y,playerCar);
         if(menu != null){
             menu.ok.isTouched(game, x, y, playerCar, enemyCar);
             menu.restart.isTouched(game, x, y, playerCar, enemyCar);
