@@ -21,12 +21,13 @@ public class Garage implements Screen, InputProcessor {
 
     float w, h;
 
-    Icon map, upgrade;
+    MapIcon mIcon;
+    UpgradeIcon uIcon;
 
-    Upgrade_menu upgrade_menu;
 
     //Data
     Preferences prefs;
+    int money;
 
     OrthographicCamera camera;
 
@@ -41,13 +42,13 @@ public class Garage implements Screen, InputProcessor {
         icon_map = new Texture(Gdx.files.internal("garage/icon_map.png"));
         icon_upgrade = new Texture(Gdx.files.internal("garage/icon_upgrade.png"));
 
-        upgrade = new Icon(100, 100, 30, 30, "Upgrade", icon_upgrade);
+        uIcon = new UpgradeIcon(100, 100, 30, 30, "Upgrade", icon_upgrade);
 
-        upgrade_menu = new Upgrade_menu(696, 564, (int) (w - 696) / 2, (int) (h - 564) / 2);
 
-        map = new Icon(80, 110, 1180, 20, "Map", icon_map);
+        mIcon = new MapIcon(80, 110, 1180, 20, "Map", icon_map);
 
         prefs = Gdx.app.getPreferences("data");
+        money = prefs.getInteger("money",0);
 
 
         camera = new OrthographicCamera(1280, 1280 * (h / w));
@@ -63,23 +64,17 @@ public class Garage implements Screen, InputProcessor {
         ScreenUtils.clear(1, 1, 1, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
+        money = prefs.getInteger("money",0);
 
         game.batch.begin();
         game.batch.draw(background, 0, 0, w, h);
 
-        map.draw(game.batch);
-        upgrade.draw(game.batch);
+        mIcon.draw(game.batch);
+        uIcon.draw(game.batch, game);
+        game.font_trans.draw(game.batch, money + " rubles", 1050,680);
 
-        if (upgrade_menu.opened) {
-            upgrade_menu.draw(game.batch, game.font_trans);
-        }
 
         game.batch.end();
-        if (Gdx.input.isTouched()) {
-            map.onClick(game);
-
-        }
     }
 
 
@@ -131,18 +126,19 @@ public class Garage implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float x = Gdx.input.getX();
-        float y = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
+        screenY = 720 - screenY;
+        if (mIcon.isClicked(screenX, screenY)) mIcon.onClick(game);
 
-        if (upgrade.onClick(game)) {
-            upgrade_menu.opened = !upgrade_menu.opened;
+        if(uIcon.isClicked(screenX, screenY)){
+            uIcon.onClick();
         }
-        map.onClick(game);
-        if (upgrade_menu.opened) {
-            for (int i = 0; i < upgrade_menu.buttons.length; i++) {
-                upgrade_menu.buttons[i].isTouched(x,y);
+
+        if (uIcon.upgrade_menu.opened){
+            for(int i = 0; i < uIcon.upgrade_menu.buttons.length; i++){
+                uIcon.upgrade_menu.buttons[i].isTouched(screenX, screenY);
             }
         }
+
         return false;
     }
 

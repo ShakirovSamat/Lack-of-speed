@@ -8,8 +8,11 @@ public class EnemyCar extends Car{
     int nextChange;
     Random random;
     long waitLock;
-    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath) {
+    int[] wheelXPosition, wheelYPosition;
+    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath, int[] wheelXPosition, int[] wheelYPosition) {
         super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
+        this.wheelXPosition = wheelXPosition;
+        this.wheelYPosition = wheelYPosition;
         random = new Random();
         waitLock = 0;
         this.speedChange = speedChange;
@@ -21,7 +24,7 @@ public class EnemyCar extends Car{
         body.setRotation(body_rotation);
         batch.draw(body, xPosition + (cur_distance - playerCar.cur_distance) * 75, yPosition, width, height);
 
-        wheel.setPosition(xPosition + 90 + (cur_distance - playerCar.cur_distance) * 75,yPosition - 16);
+        wheel.setPosition(xPosition + wheelXPosition[0] + (cur_distance - playerCar.cur_distance) * 75,yPosition + wheelYPosition[0]);
         float wheel_rotation;
         if(isFinished){
             wheel_rotation = 0;
@@ -37,7 +40,7 @@ public class EnemyCar extends Car{
         }
         wheel.setRotation(wheel.getRotation() - wheel_rotation);
         wheel.draw(batch);
-        wheel.setPosition(xPosition + width - 140 + (cur_distance - playerCar.cur_distance) * 75,yPosition - 16);
+        wheel.setPosition(xPosition + wheelXPosition[1] + (cur_distance - playerCar.cur_distance) * 75,yPosition + wheelYPosition[1]);
         wheel.draw(batch);
     }
 

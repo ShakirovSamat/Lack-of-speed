@@ -17,7 +17,6 @@ public class PlayerCar extends Car{
     public void draw(Batch batch){
         body.setRotation(body_rotation);
         body.draw(batch);
-
         wheel.setPosition(xPosition + 72,yPosition - 16);
         float wheel_rotation;
         if(isFinished){
@@ -32,6 +31,7 @@ public class PlayerCar extends Car{
         if(wheel.getRotation() <= -360){
             wheel.setRotation(0);
         }
+
         wheel.setRotation(wheel.getRotation() - wheel_rotation);
         wheel.draw(batch);
         wheel.setPosition(xPosition + width - 140,yPosition - 16);

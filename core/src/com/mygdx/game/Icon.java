@@ -6,27 +6,15 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-class Icon {
-    public int width;
-    public int height;
-    public int xPosition;
-    public int yPosition;
+public class Icon extends Unit{
+
     public String name;
     public Texture texture;
 
-    //Data
-    Preferences prefs;
-
-
     public Icon(int width, int height, int xPosition, int yPosition, String name, Texture texture) {
-        this.width = width;
-        this.height = height;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
+        super(width, height, xPosition, yPosition);
         this.name = name;
         this.texture = texture;
-
-        prefs = Gdx.app.getPreferences("data");
     }
 
 
@@ -34,35 +22,14 @@ class Icon {
         batch.draw(texture, xPosition, yPosition, width, height);
     }
 
-    public boolean onClick(Main game) {
-        float x = Gdx.input.getX();
-        float y = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
-        if (xPosition <= x && x <= xPosition + width
-                && yPosition <= y && y <= yPosition + height) {
-            switch (name) {
-                case "Race":
-                    game.setScreen(new RaceGame(game, 400, (PlayerCar) loadPlayerCar(), (EnemyCar) loadEnemyCar("race_game/data/samat.txt")));
-                    break;
-                case "Store":
-                    game.setScreen(new CardGame(game));
-                    break;
-                case "Garage":
-                    game.setScreen(new Garage(game));
-                    break;
-                case "Map":
-                    game.setScreen(new Map(game));
-                    break;
-                case "Upgrade":
-                    return true;
 
-
-            }
-        }
-        return false;
+    public boolean isClicked(int x, int y){
+        return xPosition <= x && x <= xPosition + width
+                && yPosition <= y && y <= yPosition + height;
     }
 
 
-    public EnemyCar loadEnemyCar(String dataPath){
+    public static EnemyCar loadEnemyCar(String dataPath){
         FileHandle fileHandle = Gdx.files.internal(dataPath);
         String[] str = fileHandle.readString().split(" ");
         String name = str[0];
@@ -82,16 +49,17 @@ class Icon {
         }
 
 
-        return new EnemyCar(487,126,300,120, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
+        return new EnemyCar(487,126,300,120, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath, new int[]{0,0},new int[]{0,0});
 
     }
-    public PlayerCar loadPlayerCar(){
+    public static PlayerCar loadPlayerCar(){
+        Preferences prefs = Gdx.app.getPreferences("data");
         int weight = 1000 - prefs.getInteger("Корпус", 0 ) * 15;
         int steps = prefs.getInteger("Двигатель", 0) + prefs.getInteger("Трансмисия") + prefs.getInteger("Сцепление");
         int maxSpeed = 120 + steps * 3;
         int[] speed_change = new int[]{30 + (int)(steps / 1.5), 50 + steps, 80 + (int)(steps * 1.4), 100 + (int)(steps * 2.2)};
         String bodyPath = "race_game/cars/toyota_supra.png";
         String wheelPath = "race_game/cars/wheel.png";
-        return new PlayerCar(487,126,300,40, 5, speed_change, maxSpeed, weight, bodyPath, wheelPath);
+        return new PlayerCar(487,126,300,25, 5, speed_change, maxSpeed, weight, bodyPath, wheelPath);
     }
 }

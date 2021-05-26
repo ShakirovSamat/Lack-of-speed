@@ -17,16 +17,24 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class Map implements Screen, InputProcessor {
     final Main game;
-    Texture map, icon_store, icon_garage, icon_race;
+    Texture map, icon_store, icon_garage, icon_race, icon_tournament;
     OrthographicCamera camera;
     float w, h;
     int money;
+    boolean menuOpened;
 
     //Data
     Preferences prefs;
 
+    //Menu
+    AdditionalMenu tournamentMenu;
 
-    Icon store, garage, race;
+    //Icons
+    RaceIcon rIcon;
+    GarageIcon gIcon;
+    StoreIcon sIcon;
+    TournamentIcon tIcon;
+
 
     public Map(final Main game) {
         this.game = game;
@@ -38,10 +46,13 @@ public class Map implements Screen, InputProcessor {
         icon_store = new Texture(Gdx.files.internal("Map/icon_store.png"));
         icon_garage = new Texture(Gdx.files.internal("Map/icon_garage.png"));
         icon_race = new Texture(Gdx.files.internal("Map/icon_race.png"));
+        icon_tournament = new Texture(Gdx.files.internal("Map/icon_tournament.png"));
 
-        store = new Icon(50,50, 1150,400, "Store", icon_store);
-        garage = new Icon(50,50, 800,600, "Garage", icon_garage);
-        race = new Icon(50,50, 150,380, "Race", icon_race);
+        rIcon = new RaceIcon(50,50, 150,380, "Race", icon_race);
+        gIcon = new GarageIcon(50,50, 800,600, "Garage", icon_garage);
+        sIcon = new StoreIcon(50,50, 1220,400, "Store", icon_store);
+        tIcon = new TournamentIcon(50,50, 230,635, "Tournament", icon_tournament);
+
 
         prefs = Gdx.app.getPreferences("data");
         money = prefs.getInteger("money",0);
@@ -49,6 +60,9 @@ public class Map implements Screen, InputProcessor {
         camera = new OrthographicCamera(1280,1280 * (h / w));
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
         camera.update();
+
+        tournamentMenu = new AdditionalMenu(696, 564, (int) (w - 696) / 2, (int) (h - 564) / 2, new Texture(Gdx.files.internal("garage/upgrade_background.png")));
+        menuOpened = false;
 
         Gdx.input.setInputProcessor(this);
 
@@ -62,9 +76,12 @@ public class Map implements Screen, InputProcessor {
         game.batch.begin();
         game.batch.draw(map,0,0,w,h);
         game.font_trans.draw(game.batch, money + " rubles", 1050,680);
-        store.draw(game.batch);
-        garage.draw(game.batch);
-        race.draw(game.batch);
+
+        gIcon.draw(game.batch);
+        rIcon.draw(game.batch);
+        sIcon.draw(game.batch);
+        tIcon.draw(game.batch);
+
         game.batch.end();
     }
 
@@ -114,9 +131,33 @@ public class Map implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        store.onClick(game);
-        race.onClick(game);
-        garage.onClick(game);
+        screenY = 720 - screenY;
+        if(rIcon.additionalMenu.opened){
+            rIcon.additionalMenu.start.isTouched(game);
+            rIcon.additionalMenu.close();
+        }
+        if(sIcon.additionalMenu.opened){
+            sIcon.additionalMenu.start.isTouched(game);
+            sIcon.additionalMenu.close();
+        }
+        if(tIcon.additionalMenu.opened){
+            tIcon.additionalMenu.start.isTouched(game);
+            tIcon.additionalMenu.close();
+        }
+
+        if(rIcon.isClicked(screenX, screenY)){
+            rIcon.onClick();
+        }
+        if(gIcon.isClicked(screenX, screenY)){
+            gIcon.onClick(game);
+        }
+        if(sIcon.isClicked(screenX, screenY)){
+            sIcon.onClick();
+        }
+        if(tIcon.isClicked(screenX, screenY)){
+            tIcon.onClick();
+        }
+
 
 
         return false;
