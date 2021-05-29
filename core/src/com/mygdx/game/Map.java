@@ -22,6 +22,7 @@ public class Map implements Screen, InputProcessor {
     float w, h;
     int money;
     boolean menuOpened;
+    String status;
 
     //Data
     Preferences prefs;
@@ -42,20 +43,25 @@ public class Map implements Screen, InputProcessor {
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
 
+        prefs = Gdx.app.getPreferences("data");
+        status = prefs.getString("status","null");
+        if(status.equals("defeat")){
+            prefs.clear();
+            prefs.flush();
+        }
+        money = prefs.getInteger("money",0);
+
         map = new Texture(Gdx.files.internal("Map/map.png"));
         icon_store = new Texture(Gdx.files.internal("Map/icon_store.png"));
         icon_garage = new Texture(Gdx.files.internal("Map/icon_garage.png"));
         icon_race = new Texture(Gdx.files.internal("Map/icon_race.png"));
         icon_tournament = new Texture(Gdx.files.internal("Map/icon_tournament.png"));
 
-        rIcon = new RaceIcon(50,50, 150,380, "Race", icon_race);
+        rIcon = new RaceIcon(50,50, 230,635, "Race", icon_race);
         gIcon = new GarageIcon(50,50, 800,600, "Garage", icon_garage);
-        sIcon = new StoreIcon(50,50, 1220,400, "Store", icon_store);
-        tIcon = new TournamentIcon(50,50, 230,635, "Tournament", icon_tournament);
+        sIcon = new StoreIcon(50,50, 1150,400, "Store", icon_store);
+        tIcon = new TournamentIcon(50,50, 150,380, "Tournament", icon_tournament);
 
-
-        prefs = Gdx.app.getPreferences("data");
-        money = prefs.getInteger("money",0);
 
         camera = new OrthographicCamera(1280,1280 * (h / w));
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
@@ -65,7 +71,6 @@ public class Map implements Screen, InputProcessor {
         menuOpened = false;
 
         Gdx.input.setInputProcessor(this);
-
     }
 
     @Override
@@ -75,12 +80,12 @@ public class Map implements Screen, InputProcessor {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(map,0,0,1280,720);
-        game.font_trans.draw(game.batch, money + " rubles", 1050,680);
+        game.font_trans.draw(game.batch, money + " рублей", 1050,680);
 
         gIcon.draw(game.batch);
         rIcon.draw(game.batch);
         sIcon.draw(game.batch);
-        tIcon.draw(game.batch);
+        tIcon.draw(game.batch, game.font_trans);
 
         game.batch.end();
     }

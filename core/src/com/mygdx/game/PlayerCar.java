@@ -9,6 +9,7 @@ public class PlayerCar extends Car{
 
     public PlayerCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed,  int weight, String bodyPath, String wheelPath) {
         super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
+        wheel.setScale(1.05f);
     }
 
 
@@ -17,7 +18,7 @@ public class PlayerCar extends Car{
     public void draw(Batch batch){
         body.setRotation(body_rotation);
         body.draw(batch);
-        wheel.setPosition(xPosition + 72,yPosition - 16);
+        wheel.setPosition(xPosition + 76,yPosition);
         float wheel_rotation;
         if(isFinished){
             wheel_rotation = 0;
@@ -34,7 +35,7 @@ public class PlayerCar extends Car{
 
         wheel.setRotation(wheel.getRotation() - wheel_rotation);
         wheel.draw(batch);
-        wheel.setPosition(xPosition + width - 140,yPosition - 16);
+        wheel.setPosition(xPosition + width - 146,yPosition);
         wheel.draw(batch);
     }
 

@@ -1,1 +1,0 @@
-Samat Toyota_Ae86 race_game/cars/vaz.png race_game/cars/vaz_wheel.png 900 5 30 60 90 120 150 1.3 1 0.8 0.6 0.6

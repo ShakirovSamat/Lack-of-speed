@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,11 +18,17 @@ import java.text.DecimalFormat;
 public class RaceGame implements Screen, InputProcessor {
     Main game;
 
+    //Data
+    public static Preferences prefs;
+
     // Landscape
     Landscape landscape;
 
     //UI
     UI ui;
+
+    // EnemyBrain
+    EnemyBehaviorThread enemyBot;
 
     //Cars
     public PlayerCar playerCar;
@@ -45,18 +52,22 @@ public class RaceGame implements Screen, InputProcessor {
     // Parameters
     final static float SCREEN_WIDTH = Gdx.graphics.getWidth();
     final static float SCREEN_HEIGHT = Gdx.graphics.getHeight();
-    float distance; // in meters
+    public static float distance; // in meters
+    public static boolean isTournament;
 
 
 
-    public RaceGame(Main game, int distance, PlayerCar playerCar, EnemyCar enemyCar){
+    public RaceGame(Main game, int distance, PlayerCar playerCar, EnemyCar enemyCar, boolean isTournament){
         this.game = game;
         this.distance = distance;
-
         this.playerCar = playerCar;
         this.enemyCar = enemyCar;
+        this.isTournament = isTournament;
+
         landscape = new Landscape();
         ui = new UI();
+
+        prefs = Gdx.app.getPreferences("data");
 
         game.font_trans.setColor(Color.WHITE);
 
@@ -68,6 +79,8 @@ public class RaceGame implements Screen, InputProcessor {
         camera = new OrthographicCamera(1280,1280 * (SCREEN_HEIGHT / SCREEN_WIDTH));
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
         camera.update();
+        enemyBot = new EnemyBehaviorThread();
+        enemyBot.start(enemyCar);
         Gdx.input.setInputProcessor(this);
 
     }
@@ -78,24 +91,19 @@ public class RaceGame implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
+
         ScreenUtils.clear(1, 1, 1, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         playerCar.changeDistance();
-        enemyCar.go();
-        enemyCar.rest();
-        enemyCar.changeDistance();
-
-
+        enemyBot.run();
 
         ui.checkTouchPedal(playerCar);
         playerCar.rest();
 
-
         game.batch.begin();
-
         landscape.draw(game.batch,playerCar);
-        enemyCar.draw(game.batch, playerCar);
+        enemyBot.enemyCar.draw(game.batch, playerCar);
         playerCar.draw(game.batch);
         ui.draw(game.batch, game.font_speed, game.font_trans, playerCar);
 
@@ -107,10 +115,29 @@ public class RaceGame implements Screen, InputProcessor {
             time += Gdx.graphics.getDeltaTime();
         }
         if(playerCar.isFinished && menu == null){
-            String[] results = new String[2];
+            String[] results = new String[3];
             String format_time = new DecimalFormat("#0.00").format(time);
-            results[0] = "time: " + format_time + "c";
-            results[1] = "distance: " + distance + "m";
+
+            if(time <= enemyBot.time){
+                results[0] = "Победа";
+                if(isTournament){
+                    if(prefs.getInteger("tournamentStep",0) == 3){
+                        prefs.putString("status","victory");
+                    }
+                    prefs.putInteger("tournamentStep", prefs.getInteger("tournamentStep",0) + 1);
+                    prefs.flush();
+                }
+            }
+            else{
+                results[0] = "Поражение";
+                if(isTournament){
+                    prefs.putString("status","defeat");
+                    prefs.flush();
+                }
+            }
+
+            results[1] = "Время: " + format_time + "c";
+            results[2] = "Расстояние: " + distance + "m";
             menu = new Menu(600,400, results);
         }
         if(menu != null){

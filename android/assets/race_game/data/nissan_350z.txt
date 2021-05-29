@@ -1,0 +1,1 @@
+430 139 340 120 race_game/cars/nissan_350z.png race_game/cars/nisan_350z_wheel.png 1100 5 40 80 125 170 210 -57 196 -110 -115 0.23f 0

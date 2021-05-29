@@ -115,8 +115,8 @@ public class CardGame implements InputProcessor, Screen {
 			prefs.flush();
 
 			String[] results = new String[2];
-			results[0] = "Score is " + score + " points";
-			results[1] = "Money earned " + money + " rubles";
+			results[0] = "Набрано " + score + " очков";
+			results[1] = "Заработано " + money + " рублей";
 			menu = new Menu(800,400, results);
 
 			deck.ended = true;
@@ -238,9 +238,9 @@ public class CardGame implements InputProcessor, Screen {
 			}
 
 		}
-		game.font_trans.draw(game.batch,"Score: " + score,50,650);
+		game.font_trans.draw(game.batch,"Очки: " + score,50,650);
 		String str = new DecimalFormat("#0.0").format(time);
-		game.font_trans.draw(game.batch,"Time: " + str,50,575);
+		game.font_trans.draw(game.batch,"Время: " + str,50,575);
 		game.batch.end();
 		if(!isOver){
 			time += Gdx.graphics.getDeltaTime();

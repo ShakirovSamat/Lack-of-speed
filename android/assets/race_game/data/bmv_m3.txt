@@ -1,0 +1,1 @@
+445 145 310 120 race_game/cars/bmw_m3.png race_game/cars/bmv_m3_wheel.png 1200 5 35 70 105 145 180 -13 242 -86 -86 0.285f 0

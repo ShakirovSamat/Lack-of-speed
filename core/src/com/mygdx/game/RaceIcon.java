@@ -13,7 +13,7 @@ public class RaceIcon extends Icon{
         additionalMenu = new AdditionalMenu(696, 564, (int) (Gdx.graphics.getWidth() - 696) / 2, (int) (Gdx.graphics.getHeight() - 564) / 2, new Texture(Gdx.files.internal("Map/raceMenu.png"))){
             @Override
             public void buttonDo(Main game){
-                game.setScreen(new RaceGame(game, 400, (PlayerCar) loadPlayerCar(), (EnemyCar) loadEnemyCar("race_game/data/samat.txt")));
+                game.setScreen(new RaceGame(game, 500, (PlayerCar) loadPlayerCar(), (EnemyCar) loadEnemyCar("race_game/data/vaz.txt"), false));
             }
         };
     }

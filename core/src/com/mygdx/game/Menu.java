@@ -42,7 +42,7 @@ public class Menu {
         ok.draw(batch,font2);
 
         for(int i = 0 ; i < results.length; i++){
-            font.draw(batch,results[i],xPosition + 100, yPosition + height - (i + 1) * 100);
+            font.draw(batch,results[i],xPosition + 70, yPosition + height + 20 - (i + 1) * 80);
         }
     }
 
@@ -64,30 +64,43 @@ public class Menu {
         }
 
         public void draw(Batch batch, BitmapFont font){
-            batch.draw(button,xPosition,yPosition,width,height);
-            font.draw(batch,hint,xPosition + 15, yPosition + 35);
+            if(hint.equals("Restart") && !RaceGame.isTournament){
+                batch.draw(button,xPosition,yPosition,width,height);
+                font.draw(batch,hint,xPosition + 15, yPosition + 35);
+            }
+            else if(hint.equals("Ok")){
+                batch.draw(button,xPosition,yPosition,width,height);
+                font.draw(batch,hint,xPosition + 15, yPosition + 35);
+            }
         }
 
         public void isTouched(Main game, float x, float y, PlayerCar playerCar, EnemyCar enemyCar){
             if(xPosition <= x && x <= xPosition + width && yPosition <= y && y <= yPosition + height){
                 switch (hint){
                     case "Restart":
-                        playerCar.isFinished = false;
-                        playerCar.isStarted = false;
-                        playerCar.cur_distance = 0;
-                        playerCar.curTransmission = 1;
-                        playerCar.body_rotation = 0;
-                        playerCar.curSpeed = 0;
-                        enemyCar.isFinished = false;
-                        enemyCar.isStarted = false;
-                        enemyCar.cur_distance = 0;
-                        enemyCar.curTransmission = 1;
-                        enemyCar.body_rotation = 0;
-                        enemyCar.curSpeed = 0;
-                        game.setScreen(new RaceGame(game, 400, playerCar, enemyCar));
+                        if(!RaceGame.isTournament){
+                            playerCar.isFinished = false;
+                            playerCar.isStarted = false;
+                            playerCar.cur_distance = 0;
+                            playerCar.curTransmission = 1;
+                            playerCar.body_rotation = 0;
+                            playerCar.curSpeed = 0;
+                            enemyCar.isFinished = false;
+                            enemyCar.isStarted = false;
+                            enemyCar.cur_distance = 0;
+                            enemyCar.curTransmission = 1;
+                            enemyCar.body_rotation = 0;
+                            enemyCar.curSpeed = 0;
+                            game.setScreen(new RaceGame(game, 400, playerCar, enemyCar, false));
+                        }
                         break;
                     case "Ok":
-                        game.setScreen(new Map(game));
+                        if(RaceGame.isTournament && RaceGame.prefs.getString("status","").equals("defeat")){
+                            game.setScreen(new DefeatWindow(game));
+                        }
+                        else{
+                            game.setScreen(new Map(game));
+                        }
                         break;
 
                 }

@@ -8,23 +8,27 @@ public class EnemyCar extends Car{
     int nextChange;
     Random random;
     long waitLock;
+    int type;
     int[] wheelXPosition, wheelYPosition;
-    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath, int[] wheelXPosition, int[] wheelYPosition) {
+    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath, int[] wheelXPosition, int[] wheelYPosition, float scale, int type) {
         super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
         this.wheelXPosition = wheelXPosition;
         this.wheelYPosition = wheelYPosition;
+        this.type = type;
+        this.speedChange = speedChange;
+
         random = new Random();
         waitLock = 0;
-        this.speedChange = speedChange;
         nextChange = speedChange[0] - (10 + random.nextInt(15));
-        wheel.setScale(0.3f);
+        wheel.setScale(scale);
     }
 
 
     public void draw(Batch batch, PlayerCar playerCar) {
         body.setRotation(body_rotation);
-        batch.draw(body, xPosition + (cur_distance - playerCar.cur_distance) * 75, yPosition, width, height);
-
+        if(type == 0){
+            batch.draw(body, xPosition + (cur_distance - playerCar.cur_distance) * 75, yPosition, width, height);
+        }
         wheel.setPosition(xPosition + wheelXPosition[0] + (cur_distance - playerCar.cur_distance) * 75,yPosition + wheelYPosition[0]);
         float wheel_rotation;
         if(isFinished){
@@ -42,6 +46,9 @@ public class EnemyCar extends Car{
         wheel.setRotation(wheel.getRotation() - wheel_rotation);
         wheel.draw(batch);
         wheel.setPosition(xPosition + wheelXPosition[1] + (cur_distance - playerCar.cur_distance) * 75,yPosition + wheelYPosition[1]);
+        if(type == 1){
+            batch.draw(body, xPosition + (cur_distance - playerCar.cur_distance) * 75, yPosition, width, height);
+        }
         wheel.draw(batch);
     }
 

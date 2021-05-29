@@ -32,24 +32,33 @@ public class Icon extends Unit{
     public static EnemyCar loadEnemyCar(String dataPath){
         FileHandle fileHandle = Gdx.files.internal(dataPath);
         String[] str = fileHandle.readString().split(" ");
-        String name = str[0];
-        String car = str[1];
-        String bodyPath = str[2];
-        String wheelPath = str[3];
-        int weight = Integer.parseInt(str[4]);
-        int transmissions = Integer.parseInt(str[5]);
+        int width = Integer.parseInt(str[0]);
+        int height = Integer.parseInt(str[1]);
+        int xPosition = Integer.parseInt(str[2]);
+        int yPosition = Integer.parseInt(str[3]);
+        String bodyPath = str[4];
+        String wheelPath = str[5];
+        int weight = Integer.parseInt(str[6]);
+        int transmissions = Integer.parseInt(str[7]);
         int[] speedChange = new int[transmissions - 1];
         for(int i = 0; i < transmissions - 1; i++){
-            speedChange[i] = Integer.parseInt(str[6 + i]);
+            speedChange[i] = Integer.parseInt(str[8 + i]);
         }
-        int maxSpeed = Integer.parseInt(str[5 + transmissions]);
-        float[] speeds = new float[transmissions];
-        for(int i = 0; i < transmissions; i++){
-            speeds[i] = Float.parseFloat(str[5 + transmissions + i + 1]);
+        int maxSpeed = Integer.parseInt(str[12]);
+        int[] wheelXPosition = new int[2];
+        for(int i = 0; i < 2; i++){
+            wheelXPosition[i] = Integer.parseInt(str[13 + i]);
         }
+        int[] wheelYPosition = new int[2];
+        for(int i = 0; i < 2; i++){
+            wheelYPosition[i] = Integer.parseInt(str[15 + i]);
+        }
+        float scale = Float.parseFloat(str[17]);
+        int type = Integer.parseInt(str[18]);
 
 
-        return new EnemyCar(455,157,310,120, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath, new int[]{0,0},new int[]{0,0});
+
+        return new EnemyCar(width,height,xPosition,yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath, wheelXPosition,wheelYPosition, scale,type);
 
     }
     public static PlayerCar loadPlayerCar(){
@@ -60,6 +69,6 @@ public class Icon extends Unit{
         int[] speed_change = new int[]{30 + (int)(steps / 1.5), 50 + steps, 80 + (int)(steps * 1.4), 100 + (int)(steps * 2.2)};
         String bodyPath = "race_game/cars/toyota_supra.png";
         String wheelPath = "race_game/cars/wheel.png";
-        return new PlayerCar(487,126,300,25, 5, speed_change, maxSpeed, weight, bodyPath, wheelPath);
+        return new PlayerCar(494,141,300,20, 5, speed_change, maxSpeed, weight, bodyPath, wheelPath);
     }
 }

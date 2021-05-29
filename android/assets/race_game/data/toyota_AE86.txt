@@ -1,0 +1,1 @@
+449 135 310 120 race_game/cars/toyota_ae861.png race_game/cars/toyotaAE86Wheel.png 1000 5 30 60 90 120 140 -139 105 -221 -221 0.135f 0

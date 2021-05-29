@@ -1,1 +1,0 @@
-User toyota_supra race_game/cars/toyota_supra.png race_game/cars/wheel.png 1000 5 40 70 100 130 170 1.5 1.2 1 0.8 0.9

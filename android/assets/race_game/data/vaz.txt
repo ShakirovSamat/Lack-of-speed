@@ -1,0 +1,1 @@
+455 157 310 120 race_game/cars/vaz.png race_game/cars/vaz_wheel.png 900 5 20 50 70 85 100 -32 233 -121 -121 0.23f 1
