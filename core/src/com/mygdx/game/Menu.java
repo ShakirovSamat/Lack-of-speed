@@ -24,16 +24,20 @@ public class Menu {
     //Buttons
     Button restart, ok;
 
+    public static int w,h;
+
     public Menu(int width, int height, String[] results) {
         this.width = width;
         this.height = height;
         this.results = results;
-        xPosition = (int)(RaceGame.SCREEN_WIDTH / 2 - width / 2);
-        yPosition = (int)(RaceGame.SCREEN_HEIGHT / 2 - height / 2);
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
+        xPosition = (int)(w / 2 - width / 2);
+        yPosition = (int)(h / 2 - height / 2);
         background = new Texture(Gdx.files.internal("menu_background.png"));
         button = new Texture(Gdx.files.internal("button.png"));
-        restart = new Button(170,50,xPosition + 70, yPosition + 40, "Restart");
-        ok = new Button(170,50, xPosition + width - 70 - 170,yPosition + 40, "Ok");
+        restart = new Button((int)(w / 7.52),(int)(h / 14.4),xPosition + (int)(w / 18.28), yPosition + (int)(h / 18), "Restart");
+        ok = new Button((int)(w / 7.52),(int)(h / 14.4), xPosition + width - (int)(w / 5.33),yPosition + (int)(h / 18), "Ok");
     }
 
     public void draw(Batch batch, BitmapFont font, BitmapFont font2){
@@ -42,7 +46,7 @@ public class Menu {
         ok.draw(batch,font2);
 
         for(int i = 0 ; i < results.length; i++){
-            font.draw(batch,results[i],xPosition + 70, yPosition + height + 20 - (i + 1) * 80);
+            font.draw(batch,results[i],xPosition + (int)(w / 18.28), yPosition + height + (int)(h / 36) - (i + 1) * (int)(h / 9));
         }
     }
 
@@ -66,11 +70,11 @@ public class Menu {
         public void draw(Batch batch, BitmapFont font){
             if(hint.equals("Restart") && !RaceGame.isTournament){
                 batch.draw(button,xPosition,yPosition,width,height);
-                font.draw(batch,hint,xPosition + 15, yPosition + 35);
+                font.draw(batch,hint,xPosition + (int)(w / 85.3), yPosition + (int)(h / 20.57));
             }
             else if(hint.equals("Ok")){
                 batch.draw(button,xPosition,yPosition,width,height);
-                font.draw(batch,hint,xPosition + 15, yPosition + 35);
+                font.draw(batch,hint,xPosition + (int)(w / 85.3), yPosition + (int)(h / 20.57));
             }
         }
 

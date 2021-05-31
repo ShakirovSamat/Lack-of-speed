@@ -10,10 +10,10 @@ public class RaceIcon extends Icon{
 
     public RaceIcon(int width, int height, int xPosition, int yPosition, String name, Texture texture) {
         super(width, height, xPosition, yPosition, name, texture);
-        additionalMenu = new AdditionalMenu(696, 564, (int) (Gdx.graphics.getWidth() - 696) / 2, (int) (Gdx.graphics.getHeight() - 564) / 2, new Texture(Gdx.files.internal("Map/raceMenu.png"))){
+        additionalMenu = new AdditionalMenu((int)(w / 1.83), (int)(h/ 1.27), (Gdx.graphics.getWidth() - (int)(w / 1.83)) / 2,  (Gdx.graphics.getHeight() - (int)(h/ 1.27)) / 2, new Texture(Gdx.files.internal("Map/raceMenu.png"))){
             @Override
             public void buttonDo(Main game){
-                game.setScreen(new RaceGame(game, 500, (PlayerCar) loadPlayerCar(), (EnemyCar) loadEnemyCar("race_game/data/vaz.txt"), false));
+                game.setScreen(new RaceGame(game, 500, (PlayerCar) loadPlayerCar(), (EnemyCar) loadEnemyCar("race_game/data/nissan_350z.txt"), false));
             }
         };
     }

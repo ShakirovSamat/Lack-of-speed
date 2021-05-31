@@ -14,10 +14,13 @@ public class Landscape {
     private Random random = new Random();
     public boolean isFinishing;
     int cur_first, next_first;
+    int w,h;
 
 
 
     public Landscape(){
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
         positions = new float[]{0,0,0};
         cur_first = 0;
         isFinishing = false;
@@ -36,9 +39,9 @@ public class Landscape {
     public void draw(Batch batch, PlayerCar playerCar){
 
         batch.draw(clouds,0,0, RaceGame.SCREEN_WIDTH, RaceGame.SCREEN_HEIGHT);
-        positions[0] -= playerCar.curSpeed / 3;
-        positions[1] -= playerCar.curSpeed / 9;
-        positions[2] -= playerCar.curSpeed / 30;
+        positions[0] -= (int)(w / (1280 / (playerCar.curSpeed / 3)));
+        positions[1] -= (int)(w / (1280 / (playerCar.curSpeed / 9)));
+        positions[2] -= (int)(w / (1280 / (playerCar.curSpeed / 30)));
         for(int i = 0; i < 3; i++){
             if(positions[i] <= -RaceGame.SCREEN_WIDTH){
                 positions[i] = 0;

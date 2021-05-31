@@ -13,12 +13,16 @@ public class Upgrade_menu extends  Unit {
     Texture background, engine_button, body_button, clutch_button, transmission_button, level_up_button;
     boolean opened;
     int player_money;
+    int w,h;
 
     //Data
     Preferences prefs;
 
     public Upgrade_menu(int width, int height, int xPosition, int yPosition) {
         super(width, height, xPosition, yPosition);
+
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
 
         prefs = Gdx.app.getPreferences("data");
         player_money = prefs.getInteger("money",0);;
@@ -29,10 +33,10 @@ public class Upgrade_menu extends  Unit {
         transmission_button = new Texture(Gdx.files.internal("garage/transmission_button.png"));
         level_up_button = new Texture(Gdx.files.internal("garage/levelUpButton.png"));
         background = new Texture(Gdx.files.internal("garage/upgrade_background.png"));
-        buttons[0] = new Button(276,228,xPosition + 30, yPosition + height - 20 - 228, engine_button, level_up_button,"Двигатель");
-        buttons[1] = new Button(276,228,xPosition  + width - 30 - 276, yPosition + height - 20 - 228, transmission_button, level_up_button,"Трансмисия");
-        buttons[2] = new Button(276,228,xPosition + 30, yPosition + 20, body_button, level_up_button,"Корпус");
-        buttons[3] = new Button(276,228,xPosition + width - 30 - 276, yPosition + 20, clutch_button, level_up_button,"Сцепление");
+        buttons[0] = new Button((int)(w / 4.63),(int)(h / 3.15),xPosition + (int)(w / 42.6), yPosition + height - (int)(h / 2.9), engine_button, level_up_button,"Двигатель");
+        buttons[1] = new Button((int)(w / 4.63),(int)(h / 3.15),xPosition  + width - (int)(w / 4.18), yPosition + height - (int)(h / 2.9), transmission_button, level_up_button,"Трансмисия");
+        buttons[2] = new Button((int)(w / 4.63),(int)(h / 3.15),xPosition + (int)(w / 42.6), yPosition + (int)(h / 36), body_button, level_up_button,"Корпус");
+        buttons[3] = new Button((int)(w / 4.63),(int)(h / 3.15),xPosition + width - (int)(w / 4.18), yPosition + (int)(h / 36), clutch_button, level_up_button,"Сцепление");
 
         opened = false;
     }
@@ -78,13 +82,13 @@ public class Upgrade_menu extends  Unit {
         public void draw(Batch batch, BitmapFont font){
             if(timeLock <= System.currentTimeMillis()){
                 batch.draw(texture,xPosition,yPosition,width, height);
-                font.draw(batch, String.valueOf(step) + "/10" ,xPosition + width - 90, yPosition + 30);
+                font.draw(batch, String.valueOf(step) + "/10" ,xPosition + width - (int)(w / 14.2), yPosition + (int)(h / 24));
 
                 if(step >= 10){
-                    font.draw(batch, "Max" ,xPosition + 40, yPosition + 70);
+                    font.draw(batch, "Max" ,xPosition + (int)(w / 32), yPosition + (int)(h / 10.28));
                 }
                 else{
-                    font.draw(batch, money + " rubles" ,xPosition + 40, yPosition + 70);
+                    font.draw(batch, money + " rubles" ,xPosition + (int)(w / 32), yPosition + (int)(h / 10.28));
                 }
             }
             else{

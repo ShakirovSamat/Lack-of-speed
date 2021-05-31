@@ -19,11 +19,11 @@ public class Main extends Game {
         font = new BitmapFont();
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/speedometer.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 60;
+        parameter.size = (int)(Gdx.graphics.getHeight() / 12);
         String chars = "йцукенгшщзъфывапролджэячсмитьбюЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789][_!$%#@|\\\\/?-+=()*&.;:,{}\\\"´`'<>";
         parameter.characters = chars;
         font_speed = generator.generateFont(parameter);
-        parameter.size = 35;
+        parameter.size = (int)(Gdx.graphics.getHeight() / 20.5);
         font_trans = generator.generateFont(parameter);
         this.setScreen(new Map(this));
     }

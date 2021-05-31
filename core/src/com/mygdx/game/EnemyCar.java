@@ -10,7 +10,7 @@ public class EnemyCar extends Car{
     long waitLock;
     int type;
     int[] wheelXPosition, wheelYPosition;
-    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath, int[] wheelXPosition, int[] wheelYPosition, float scale, int type) {
+    public EnemyCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath, int[] wheelXPosition, int[] wheelYPosition, float size, int type) {
         super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
         this.wheelXPosition = wheelXPosition;
         this.wheelYPosition = wheelYPosition;
@@ -20,7 +20,8 @@ public class EnemyCar extends Car{
         random = new Random();
         waitLock = 0;
         nextChange = speedChange[0] - (10 + random.nextInt(15));
-        wheel.setScale(scale);
+        wheel.setSize((int)(w / (1280 / size)), (int)(w / (1280 / size)));
+        wheel.setOrigin((int)(w / (1280f / size)) / 2f, (int)(w / (1280f / size)) / 2f);
     }
 
 

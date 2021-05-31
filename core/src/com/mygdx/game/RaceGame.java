@@ -4,14 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.text.DecimalFormat;
 
@@ -36,8 +40,10 @@ public class RaceGame implements Screen, InputProcessor {
 
     //Menu
     Menu menu;
+
     //Camera
-    OrthographicCamera camera;
+    private Viewport viewport;
+    private Camera camera;
 
     //Results
     float time;
@@ -76,9 +82,9 @@ public class RaceGame implements Screen, InputProcessor {
         cube_second = getAnimation(4,4, "race_game/animations/cube_second.png", 30f);
         cube_third = getAnimation(4,4, "race_game/animations/cube_third.png", 30f);
 
-        camera = new OrthographicCamera(1280,1280 * (SCREEN_HEIGHT / SCREEN_WIDTH));
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
-        camera.update();
+        camera = new PerspectiveCamera();
+        viewport = new ScreenViewport(camera);
+
         enemyBot = new EnemyBehaviorThread();
         enemyBot.start(enemyCar);
         Gdx.input.setInputProcessor(this);
@@ -93,8 +99,7 @@ public class RaceGame implements Screen, InputProcessor {
     public void render(float delta) {
 
         ScreenUtils.clear(1, 1, 1, 1);
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+
         playerCar.changeDistance();
         enemyBot.run();
 
@@ -138,7 +143,7 @@ public class RaceGame implements Screen, InputProcessor {
 
             results[1] = "Время: " + format_time + "c";
             results[2] = "Расстояние: " + distance + "m";
-            menu = new Menu(600,400, results);
+            menu = new Menu((int)(SCREEN_WIDTH / 2.13),(int)(SCREEN_HEIGHT / 1.8), results);
         }
         if(menu != null){
             menu.draw(game.batch, game.font_speed, game.font_trans);
@@ -191,8 +196,7 @@ public class RaceGame implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float deltaWidth1280 = Gdx.graphics.getWidth() / 1280f;
-        float x = screenX / deltaWidth1280;
+        float x = screenX;
         float y = Gdx.graphics.getHeight() - screenY;
         ui.checkTouchTransmissions(x, y,playerCar);
         if(menu != null){
@@ -288,7 +292,7 @@ public class RaceGame implements Screen, InputProcessor {
                 }
                 break;
         }
-        batch.draw(curFrame,(int)(SCREEN_WIDTH / 2 - 96), (int)(SCREEN_HEIGHT / 2 - 96), 192,192);
+        batch.draw(curFrame,(int)(SCREEN_WIDTH / 2 - (int)(SCREEN_WIDTH / 13.33)), (int)(SCREEN_HEIGHT / 2 - (int)(SCREEN_WIDTH / 13.33)), (int)(SCREEN_WIDTH / 6.66),(int)(SCREEN_WIDTH / 6.66));
         stateTime += Gdx.graphics.getDeltaTime();
     }
 }

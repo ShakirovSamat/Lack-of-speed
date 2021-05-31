@@ -16,7 +16,7 @@ public class TournamentIcon extends  Icon{
         pref = Gdx.app.getPreferences("data");
         step = pref.getInteger("tournamentStep", 0);
 
-        additionalMenu = new AdditionalMenu(696, 564, (int) (Gdx.graphics.getWidth() - 696) / 2, (int) (Gdx.graphics.getHeight() - 564) / 2, new Texture(Gdx.files.internal("Map/tournamentMenu.png"))){
+        additionalMenu = new AdditionalMenu((int)(w / 1.83), (int)(h/ 1.27), (Gdx.graphics.getWidth() - (int)(w / 1.83)) / 2,  (Gdx.graphics.getHeight() - (int)(h/ 1.27)) / 2, new Texture(Gdx.files.internal("Map/tournamentMenu.png"))){
             @Override
             public void buttonDo(Main game){
                 String enemyCarPath = "race_game/data/";
@@ -44,7 +44,7 @@ public class TournamentIcon extends  Icon{
         if(additionalMenu.opened){
             additionalMenu.draw(batch);
             if(step < 4){
-                font.draw(batch, "Выиграно " + step + "/4 гонщиков",additionalMenu.xPosition + 20, additionalMenu.yPosition + 60);
+                font.draw(batch, "Выиграно " + step + "/4 гонщиков",additionalMenu.xPosition + (int)(Gdx.graphics.getWidth() / 64), additionalMenu.yPosition + (int)(Gdx.graphics.getHeight() / 12));
             }
             else{
                 font.draw(batch, "Вы абсолютный чемпион",additionalMenu.xPosition + 20, additionalMenu.yPosition + 60);

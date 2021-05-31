@@ -18,7 +18,7 @@ public class  AdditionalMenu extends Unit{
         super(width, height, xPosition, yPosition);
         this.texture = texture;
         opened = false;
-        start = new Button(200,75,xPosition + width - 250, yPosition + 30,new Texture(Gdx.files.internal("Map/buttonMenu.png")));
+        start = new Button((int)(Gdx.graphics.getWidth() / 6.4),(int)(Gdx.graphics.getHeight() / 9.6),xPosition + width - (int)(Gdx.graphics.getWidth() / 5.12), yPosition + Gdx.graphics.getHeight() / 24,new Texture(Gdx.files.internal("Map/buttonMenu.png")));
     }
 
     public  void draw(Batch batch){
@@ -33,7 +33,7 @@ public class  AdditionalMenu extends Unit{
 
     public void close(){
         float x  = Gdx.input.getX();
-        float y  = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
+        float y  = Gdx.graphics.getHeight() - Gdx.input.getY();
         if(opened && (x < xPosition || xPosition + width < x)
                 || (y < yPosition || yPosition + height < y)) {
             opened = false;
@@ -56,7 +56,7 @@ public class  AdditionalMenu extends Unit{
 
         public void isTouched(Main game){
             float x  = Gdx.input.getX();
-            float y  = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
+            float y  = Gdx.graphics.getHeight() - Gdx.input.getY();
             if(opened && xPosition <= x && x <= xPosition + width
                     && yPosition <= y && y <= yPosition + height) {
                 buttonDo(game);

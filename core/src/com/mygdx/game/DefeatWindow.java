@@ -3,10 +3,14 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class DefeatWindow implements Screen, InputProcessor {
 
@@ -17,7 +21,8 @@ public class DefeatWindow implements Screen, InputProcessor {
     Texture background;
     public Button button_exit;
 
-    OrthographicCamera camera;
+    private Viewport viewport;
+    private Camera camera;
 
     public DefeatWindow(final Main game){
         this.game = game;
@@ -26,11 +31,10 @@ public class DefeatWindow implements Screen, InputProcessor {
         h = Gdx.graphics.getHeight();
 
         background = new Texture(Gdx.files.internal("gameOver/game_over_background.png"));
-        button_exit = new Button(300,112,960,40, new Texture(Gdx.files.internal("gameOver/button.png")));
+        button_exit = new Button((int)(w / 4.26),(int)(h / 6.42),(int)(w /1.33),(int)(h / 18), new Texture(Gdx.files.internal("gameOver/button.png")));
 
-        camera = new OrthographicCamera(1280, 1280 * (h / w));
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-        camera.update();
+        camera = new PerspectiveCamera();
+        viewport = new ScreenViewport(camera);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -38,8 +42,6 @@ public class DefeatWindow implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         game.batch.draw(background,0,0,w,h);
         button_exit.draw(game.batch);
@@ -92,8 +94,7 @@ public class DefeatWindow implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float deltaWidth1280 = Gdx.graphics.getWidth() / 1280f;
-        float x = screenX / deltaWidth1280;
+        float x = screenX;
         float y = Gdx.graphics.getHeight() - screenY;
 
         button_exit.onClick(x,y);

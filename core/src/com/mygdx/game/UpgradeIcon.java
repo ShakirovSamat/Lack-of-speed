@@ -10,7 +10,7 @@ public class UpgradeIcon extends Icon{
 
     public UpgradeIcon(int width, int height, int xPosition, int yPosition, String name, Texture texture) {
         super(width, height, xPosition, yPosition, name, texture);
-        upgrade_menu = new Upgrade_menu(696, 564, (int) (Gdx.graphics.getWidth() - 696) / 2, (int) (Gdx.graphics.getHeight() - 564) / 2);
+        upgrade_menu = new Upgrade_menu((int)(w / 1.83), (int)(h/ 1.27), (Gdx.graphics.getWidth() - (int)(w / 1.83)) / 2,  (Gdx.graphics.getHeight() - (int)(h/ 1.27)) / 2);
     }
 
     public void draw(Batch batch, Main game){

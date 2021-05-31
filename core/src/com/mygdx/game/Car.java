@@ -31,12 +31,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
     //Graphic
     Sprite body, wheel;
+    int w,h;
 
-    public Car(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath){
-        this.width = width;
-        this.height = height;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
+    public Car(float width, float height, float xPosition, float yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath){
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
+        this.width = (int)(w / (1280 / width));
+        this.height = (int)(h /(720 / height));
+        this.xPosition = (int)(w / (1280 / xPosition));
+        this.yPosition = (int)(h / (720 / yPosition));
         this.transmissions = transmissions;
         this.speedChange = speedChange;
         this.weight = weight;
@@ -49,8 +52,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
         isSwitching = false;
         timeLock = 0;
         body = new Sprite(new Texture(Gdx.files.internal(bodyPath)));
-        body.setPosition(xPosition,yPosition);
-        body.setSize(width, height);
+        body.setPosition(this.xPosition,this.yPosition);
+        body.setSize(this.width, this.height);
         wheel = new Sprite(new Texture(Gdx.files.internal(wheelPath)));
     }
 
@@ -130,7 +133,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
         if(body_rotation > 0){
             body_rotation -= 0.08;
         }
-        else if(body_rotation > - 2 && isFinished && curSpeed != 0){
+        else if(body_rotation > -1 && isFinished && curSpeed != 0){
             body_rotation -= 0.08;
         }
         else if(isFinished && curSpeed == 0 && body_rotation < 0){

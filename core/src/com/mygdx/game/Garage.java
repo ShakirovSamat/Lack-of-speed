@@ -5,12 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 public class Garage implements Screen, InputProcessor {
@@ -29,7 +33,8 @@ public class Garage implements Screen, InputProcessor {
     Preferences prefs;
     int money;
 
-    OrthographicCamera camera;
+    private Viewport viewport;
+    private Camera camera;
 
 
     public Garage(Main game) {
@@ -42,18 +47,17 @@ public class Garage implements Screen, InputProcessor {
         icon_map = new Texture(Gdx.files.internal("garage/icon_map.png"));
         icon_upgrade = new Texture(Gdx.files.internal("garage/icon_upgrade.png"));
 
-        uIcon = new UpgradeIcon(100, 100, 30, 30, "Upgrade", icon_upgrade);
+        uIcon = new UpgradeIcon((int)(w / 12.8), (int)(w / 12.8), (int)(w / 42.6), (int)(h / 24), "Upgrade", icon_upgrade);
 
 
-        mIcon = new MapIcon(80, 110, 1180, 20, "Map", icon_map);
+        mIcon = new MapIcon((int)(w / 16), (int)(h / 6.54), (int)(w / 1.08), (int)(h / 36), "Map", icon_map);
 
         prefs = Gdx.app.getPreferences("data");
         money = prefs.getInteger("money",0);
 
 
-        camera = new OrthographicCamera(1280, 1280 * (h / w));
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-        camera.update();
+        camera = new PerspectiveCamera();
+        viewport = new ScreenViewport(camera);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -62,8 +66,6 @@ public class Garage implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
         money = prefs.getInteger("money",0);
 
         game.batch.begin();
@@ -71,7 +73,7 @@ public class Garage implements Screen, InputProcessor {
 
         mIcon.draw(game.batch);
         uIcon.draw(game.batch, game);
-        game.font_trans.draw(game.batch, money + " рублей", 1050,680);
+        game.font_trans.draw(game.batch, money + " рублей", (int)(w / 1.22),(int)(h / 1.05));
 
 
         game.batch.end();
@@ -126,8 +128,7 @@ public class Garage implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float deltaWidth1280 = Gdx.graphics.getWidth() / 1280f;
-        float x = screenX / deltaWidth1280;
+        float x = screenX;
         float y = Gdx.graphics.getHeight() - screenY;
         if (mIcon.isClicked(x, y)) mIcon.onClick(game);
 

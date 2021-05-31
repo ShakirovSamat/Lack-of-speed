@@ -10,11 +10,14 @@ public class Icon extends Unit{
 
     public String name;
     public Texture texture;
+    static int w,h;
 
     public Icon(int width, int height, int xPosition, int yPosition, String name, Texture texture) {
         super(width, height, xPosition, yPosition);
         this.name = name;
         this.texture = texture;
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
     }
 
 
@@ -47,18 +50,18 @@ public class Icon extends Unit{
         int maxSpeed = Integer.parseInt(str[12]);
         int[] wheelXPosition = new int[2];
         for(int i = 0; i < 2; i++){
-            wheelXPosition[i] = Integer.parseInt(str[13 + i]);
+            wheelXPosition[i] = (int)(w / ( 1280f / Float.parseFloat(str[13 + i])));
         }
         int[] wheelYPosition = new int[2];
         for(int i = 0; i < 2; i++){
-            wheelYPosition[i] = Integer.parseInt(str[15 + i]);
+            wheelYPosition[i] = (int)(h / (720f / Float.parseFloat(str[15 + i])));
         }
-        float scale = Float.parseFloat(str[17]);
+        float size = Float.parseFloat(str[17]);
         int type = Integer.parseInt(str[18]);
 
 
 
-        return new EnemyCar(width,height,xPosition,yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath, wheelXPosition,wheelYPosition, scale,type);
+        return new EnemyCar(width,height,xPosition,yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath, wheelXPosition,wheelYPosition, size,type);
 
     }
     public static PlayerCar loadPlayerCar(){

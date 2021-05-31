@@ -7,13 +7,17 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -24,7 +28,8 @@ public class CardGame implements InputProcessor, Screen {
 
 
 	// Graphic
-	OrthographicCamera camera;
+	private Viewport viewport;
+	private Camera camera;
 	SpriteBatch batch;
 	Texture ordinary_card, hammer_card, nail_card,  brick_card, yellow_screwdriver_card , green_screwdriver_card, axe_card;
 	Animation<TextureRegion> hammer_flip, nail_flip, brick_flip, yellow_screwdriver_flip, green_screwdriver_flip, axe_flip;
@@ -89,12 +94,11 @@ public class CardGame implements InputProcessor, Screen {
 		green_screwdriver_card = new Texture(Gdx.files.internal("card_game/green_screwdriver.png"));
 		axe_card = new Texture(Gdx.files.internal("card_game/axe.png"));
 
-		deck = new Deck(130,208);
+		deck = new Deck((int)(SCREEN_WIDTH / 9.84),(int)(SCREEN_HEIGHT / 3.46));
 		deck.sortCards();
 
-		camera = new OrthographicCamera(1280,1280 * (SCREEN_HEIGHT / SCREEN_WIDTH));
-		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
-		camera.update();
+		camera = new PerspectiveCamera();
+		viewport = new ScreenViewport(camera);
 
 		prefs = Gdx.app.getPreferences("data");
 
@@ -105,8 +109,6 @@ public class CardGame implements InputProcessor, Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor( 249f, 236f, 177f, 1 );
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
-		camera.update();
-		game.batch.setProjectionMatrix(camera.combined);
 
 		if(time >= 60 && !isOver){
 			int money = score * (50 + (int)(Math.random() * 100));
@@ -117,7 +119,7 @@ public class CardGame implements InputProcessor, Screen {
 			String[] results = new String[2];
 			results[0] = "Набрано " + score + " очков";
 			results[1] = "Заработано " + money + " рублей";
-			menu = new Menu(800,400, results);
+			menu = new Menu((int)(SCREEN_WIDTH / 1.6),(int)(SCREEN_HEIGHT / 1.71), results);
 
 			deck.ended = true;
 			for(int i = 0; i < deck.getAmountOfCards(); i++){
@@ -238,9 +240,9 @@ public class CardGame implements InputProcessor, Screen {
 			}
 
 		}
-		game.font_trans.draw(game.batch,"Очки: " + score,50,650);
+		game.font_trans.draw(game.batch,"Очки: " + score,(int)(SCREEN_WIDTH / 25.6),(int)(SCREEN_HEIGHT / 1.1));
 		String str = new DecimalFormat("#0.0").format(time);
-		game.font_trans.draw(game.batch,"Время: " + str,50,575);
+		game.font_trans.draw(game.batch,"Время: " + str,(int)(SCREEN_WIDTH / 25.6),(int)(SCREEN_HEIGHT / 1.25));
 		game.batch.end();
 		if(!isOver){
 			time += Gdx.graphics.getDeltaTime();
@@ -293,8 +295,8 @@ public class CardGame implements InputProcessor, Screen {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if(deck.opened < 2) {
-			float x = screenX / (SCREEN_WIDTH / 1280);
-			float y = Math.abs(screenY / (SCREEN_HEIGHT / (1280 * (SCREEN_HEIGHT / SCREEN_WIDTH))) - 1280 * (SCREEN_HEIGHT / SCREEN_WIDTH));
+			float x = screenX;
+			float y = Gdx.graphics.getHeight() - screenY;
 
 			if(menu != null){
 				if(menu.ok.isTouched(game,x,y)){

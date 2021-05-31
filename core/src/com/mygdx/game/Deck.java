@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,7 +15,8 @@ public class Deck {
        Random random = new Random();
        private int type;
        private ArrayList<Card> cards = new ArrayList<Card>();
-    ArrayList<Integer> types = new ArrayList<Integer>();
+       ArrayList<Integer> types = new ArrayList<Integer>();
+       int w,h;
 
     public Deck(int cards_width, int cards_height){
         this.cards_width = cards_width;
@@ -21,7 +24,8 @@ public class Deck {
         opened = 0;
         completed = 0;
         ended = false;
-
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
     }
 
     public void sortCards(){
@@ -46,7 +50,7 @@ public class Deck {
             for(int i = 0; i < 2; i++){
                 for(int j = 0; j < 4; j++){
                     int index = random.nextInt(cur_size);
-                    cards.add(new Card(340 + (cards_width + 40) * j, 120 + (cards_height + 40) * i,types.get(index)));
+                    cards.add(new Card((int)(w / 3.76) + (cards_width + (int)(w / 32)) * j, (int)(h / 6) + (cards_height + (int)(h / 18)) * i,types.get(index)));
                     types.remove(index);
                     cur_size--;
                 }
@@ -65,14 +69,14 @@ public class Deck {
             for(int i = 0; i < 2; i++){
                 for(int j = 0; j < 3; j++){
                     int index = random.nextInt(cur_size);
-                    cards.add(new Card(280 + (cards_width * 2 + 20) * j, 40 + (cards_height * 2 + 20) * i,types.get(index)));
+                    cards.add(new Card((int)(w / 4.57) + (cards_width * 2 + (int)(w / 64)) * j, (int)(h / 18) + (cards_height * 2 + (int)(h / 36)) * i,types.get(index)));
                     types.remove(index);
                     cur_size--;
                 }
             }
             for(int i = 0; i < 4; i++){
                 int index = random.nextInt(cur_size);
-                cards.add(new Card(140 + (cards_width * 2 + 20) * i, 40 + (cards_height + 10),types.get(index)));
+                cards.add(new Card((int)(w / 9.14) + (cards_width * 2 + (int)(w / 64)) * i, (int)(h / 18) + (cards_height + (int)(h / 72)),types.get(index)));
                 types.remove(index);
                 cur_size--;
             }
@@ -89,7 +93,7 @@ public class Deck {
             for(int i = 0; i < 3; i++){
                 for(int j = 0; j < 4; j++){
                     int index = random.nextInt(cur_size);
-                    cards.add(new Card(340 + (cards_width + 20) * j, 30 + (cards_height + 10) * i,types.get(index)));
+                    cards.add(new Card((int)(w / 3.76) + (cards_width + (int)(w / 64)) * j, (int)(h / 24) + (cards_height + (int)(h / 72)) * i,types.get(index)));
                     types.remove(index);
                     cur_size--;
                 }

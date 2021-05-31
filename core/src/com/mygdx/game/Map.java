@@ -6,19 +6,23 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.ScreenUtils;
-
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 public class Map implements Screen, InputProcessor {
     final Main game;
     Texture map, icon_store, icon_garage, icon_race, icon_tournament;
-    OrthographicCamera camera;
     float w, h;
     int money;
     boolean menuOpened;
@@ -36,10 +40,14 @@ public class Map implements Screen, InputProcessor {
     StoreIcon sIcon;
     TournamentIcon tIcon;
 
+    private Viewport viewport;
+    private Camera camera;
+
 
     public Map(final Main game) {
         this.game = game;
         game.font_trans.setColor(Color.BLACK);
+
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
 
@@ -57,18 +65,19 @@ public class Map implements Screen, InputProcessor {
         icon_race = new Texture(Gdx.files.internal("Map/icon_race.png"));
         icon_tournament = new Texture(Gdx.files.internal("Map/icon_tournament.png"));
 
-        rIcon = new RaceIcon(50,50, 230,635, "Race", icon_race);
-        gIcon = new GarageIcon(50,50, 800,600, "Garage", icon_garage);
-        sIcon = new StoreIcon(50,50, 1150,400, "Store", icon_store);
-        tIcon = new TournamentIcon(50,50, 150,380, "Tournament", icon_tournament);
+        int iconW_H = (int)w / 25;
+        rIcon = new RaceIcon(iconW_H,iconW_H, (int)(w / 5.5),(int)(h / 1.14), "Race", icon_race);
+        gIcon = new GarageIcon(iconW_H,iconW_H, (int)(w / 1.6),(int)(h / 1.2), "Garage", icon_garage);
+        sIcon = new StoreIcon(iconW_H,iconW_H, (int)(w / 1.1),(int)(h / 1.8), "Store", icon_store);
+        tIcon = new TournamentIcon(iconW_H,iconW_H, (int)(w / 8.53),(int)(h / 1.9), "Tournament", icon_tournament);
 
 
-        camera = new OrthographicCamera(1280,1280 * (h / w));
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f,0);
-        camera.update();
 
         tournamentMenu = new AdditionalMenu(696, 564, (int) (w - 696) / 2, (int) (h - 564) / 2, new Texture(Gdx.files.internal("garage/upgrade_background.png")));
         menuOpened = false;
+
+        camera = new PerspectiveCamera();
+        viewport = new ScreenViewport(camera);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -76,11 +85,9 @@ public class Map implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
-        game.batch.draw(map,0,0,1280,720);
-        game.font_trans.draw(game.batch, money + " рублей", 1050,680);
+        game.batch.draw(map,0,0,w,h);
+        game.font_trans.draw(game.batch, money + " рублей", (int)(w / 1.22),(int)(h / 1.05));
 
         gIcon.draw(game.batch);
         rIcon.draw(game.batch);
@@ -136,8 +143,7 @@ public class Map implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        float deltaWidth1280 = Gdx.graphics.getWidth() / 1280f;
-        float x = screenX / deltaWidth1280;
+        float x = screenX;
         float y = Gdx.graphics.getHeight() - screenY;
         if(rIcon.additionalMenu.opened){
             rIcon.additionalMenu.start.isTouched(game);

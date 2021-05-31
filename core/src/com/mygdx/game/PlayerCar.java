@@ -7,9 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class PlayerCar extends Car{
 
+    float w,h;
     public PlayerCar(int width, int height, int xPosition, int yPosition, int transmissions, int[] speedChange, int maxSpeed,  int weight, String bodyPath, String wheelPath) {
         super(width, height, xPosition, yPosition, transmissions, speedChange, maxSpeed, weight, bodyPath, wheelPath);
-        wheel.setScale(1.05f);
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
+        wheel.setSize((int)(w / 18f), (int)(w / 18f));
+        wheel.setOrigin((int)(w / 18f) / 2f, (int)(w / 18f) / 2f);
     }
 
 
@@ -18,7 +22,7 @@ public class PlayerCar extends Car{
     public void draw(Batch batch){
         body.setRotation(body_rotation);
         body.draw(batch);
-        wheel.setPosition(xPosition + 76,yPosition);
+        wheel.setPosition(xPosition + (int)(w / 16.84),yPosition - (int)(h / 720));
         float wheel_rotation;
         if(isFinished){
             wheel_rotation = 0;
@@ -35,7 +39,7 @@ public class PlayerCar extends Car{
 
         wheel.setRotation(wheel.getRotation() - wheel_rotation);
         wheel.draw(batch);
-        wheel.setPosition(xPosition + width - 146,yPosition);
+        wheel.setPosition(xPosition + width - (int)(w / 8.76),yPosition - (int)(h / 720));
         wheel.draw(batch);
     }
 
@@ -64,14 +68,14 @@ public class PlayerCar extends Car{
                 batch.draw(texture,xPosition, yPosition, width, height);
             }
             else{
-                batch.draw(texture,xPosition, yPosition, width, height - 30);
+                batch.draw(texture,xPosition, yPosition, width, height - (int)(Gdx.graphics.getHeight() / 24));
             }
         }
 
         public void checkTouch(PlayerCar playerCar){
             if(Gdx.input.isTouched()){
                 float x  = Gdx.input.getX();
-                float y  = 1280 * (RaceGame.SCREEN_HEIGHT / RaceGame.SCREEN_WIDTH) - Gdx.input.getY();
+                float y  = Gdx.graphics.getHeight() - Gdx.input.getY();
                 if(xPosition <= x && x <= xPosition + width
                         && yPosition <= y && y <= yPosition + height){
                     ispPressed = true;
