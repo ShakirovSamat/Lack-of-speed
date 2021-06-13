@@ -4,6 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.mygdx.game.defeatWindow.DefeatWindow;
+import com.mygdx.game.map.Map;
+import com.mygdx.game.raceGame.EnemyCar;
+import com.mygdx.game.raceGame.PlayerCar;
+import com.mygdx.game.raceGame.RaceGame;
+import com.mygdx.game.victoryWindow.VictoryWindow;
+
+import java.util.Random;
 
 
 public class Menu {
@@ -22,7 +30,8 @@ public class Menu {
     static Texture button;
 
     //Buttons
-    Button restart, ok;
+    public Button restart;
+    public Button ok;
 
     public static int w,h;
 
@@ -52,7 +61,7 @@ public class Menu {
 
 
 
-    static class Button{
+    public static class Button{
         private int width;
         private int height;
         private int xPosition;
@@ -68,7 +77,7 @@ public class Menu {
         }
 
         public void draw(Batch batch, BitmapFont font){
-            if(hint.equals("Restart") && !RaceGame.isTournament){
+            if(hint.equals("Restart") && !com.mygdx.game.raceGame.RaceGame.isTournament){
                 batch.draw(button,xPosition,yPosition,width,height);
                 font.draw(batch,hint,xPosition + (int)(w / 85.3), yPosition + (int)(h / 20.57));
             }
@@ -82,7 +91,7 @@ public class Menu {
             if(xPosition <= x && x <= xPosition + width && yPosition <= y && y <= yPosition + height){
                 switch (hint){
                     case "Restart":
-                        if(!RaceGame.isTournament){
+                        if(!com.mygdx.game.raceGame.RaceGame.isTournament){
                             playerCar.isFinished = false;
                             playerCar.isStarted = false;
                             playerCar.cur_distance = 0;
@@ -95,35 +104,33 @@ public class Menu {
                             enemyCar.curTransmission = 1;
                             enemyCar.body_rotation = 0;
                             enemyCar.curSpeed = 0;
-                            game.setScreen(new RaceGame(game, 400, playerCar, enemyCar, false));
+                            game.setScreen(new com.mygdx.game.raceGame.RaceGame(game, 400, playerCar, enemyCar, false));
                         }
                         break;
                     case "Ok":
-                        if(RaceGame.isTournament && RaceGame.prefs.getString("status","").equals("defeat")){
+                        if(com.mygdx.game.raceGame.RaceGame.isTournament && RaceGame.prefs.getString("status","").equals("defeat")){
                             game.setScreen(new DefeatWindow(game));
                         }
                         else{
-                            game.setScreen(new Map(game));
+                            if(RaceGame.prefs.getString("status","").equals("victory")){
+                                game.setScreen(new VictoryWindow(game));
+                            }
+                            else{
+                                game.setScreen(new Map(game));
+                            }
                         }
                         break;
 
                 }
             }
         }
-        public boolean isTouched(Main game, float x, float y){
+        public boolean isTouched(float x, float y){
             if(xPosition <= x && x <= xPosition + width && yPosition <= y && y <= yPosition + height){
-                switch (hint){
-                    case "Restart":
-                        game.setScreen(new CardGame(game));
-                        break;
-                    case "Ok":
-                        game.setScreen(new Map(game));
-                        break;
 
-                }
                 return true;
             }
             return false;
         }
+
     }
 }
