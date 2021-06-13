@@ -40,7 +40,7 @@ public class FactoryGame implements Screen, InputProcessor {
     //Menu
     Menu menu;
 
-    long duration;
+    float duration;
     long timeLock;
 
     int score;
@@ -110,7 +110,7 @@ public class FactoryGame implements Screen, InputProcessor {
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
 
-        if(time >= 10 && !isOver){
+        if(time >= 60 && !isOver){
             int money = 0;
             if(score > 0){
                 money = score * (50 + (int)(Math.random() * 100));
@@ -132,7 +132,7 @@ public class FactoryGame implements Screen, InputProcessor {
 
         if(timeLock <= System.currentTimeMillis()){
             garbage.add(new Garbage());
-            timeLock = (System.currentTimeMillis() + duration * 1000);
+            timeLock = (System.currentTimeMillis() + (long)(duration * 1000));
         }
         game.batch.begin();
         game.batch.draw(background_back,0,0,w,h);
@@ -170,8 +170,12 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("metal")) {
                         score += 2;
+                        duration -= 0.1f;
                     } else {
                         score -= 1;
+                        if(duration <= 2.92){
+                            duration += 0.1f;
+                        }
                     }
                 }
                 garbage.get(i).isFallen = true;
@@ -181,8 +185,12 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("glass")) {
                         score += 2;
+                        duration -= 0.1f;
                     } else {
                         score -= 1;
+                        if(duration <= 2.92){
+                            duration += 0.1f;
+                        }
                     }
                 }
                 garbage.get(i).isFallen = true;
@@ -191,8 +199,12 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("plastic")) {
                         score += 2;
+                        duration -= 0.1f;
                     } else {
                         score -= 1;
+                        if(duration <= 2.92){
+                            duration += 0.1f;
+                        }
                     }
                 }
                 garbage.get(i).isFallen = true;
@@ -201,8 +213,12 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("paper")) {
                         score += 2;
+                        duration -= 0.1f;
                     } else {
                         score -= 1;
+                        if(duration <= 2.92){
+                            duration += 0.1f;
+                        }
                     }
                 }
                 garbage.get(i).isFallen = true;
@@ -214,7 +230,7 @@ public class FactoryGame implements Screen, InputProcessor {
                 int step = 3;
                 if (score >= 0 && score / 4 <= 4) {
                     step += score / 4;
-                } else if (score / 4 == 4) {
+                } else if (score / 4 > 4) {
                     step += 4;
                 }
                 garbage.get(i).xPosition += (int) (w / (1920 / step));
