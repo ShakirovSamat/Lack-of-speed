@@ -11,6 +11,7 @@ public class MapIcon extends Icon {
     }
 
     public void onClick(Main game){
+        Main.buttonPressed.play(1f);
         game.setScreen(new Map(game));
     }
 }

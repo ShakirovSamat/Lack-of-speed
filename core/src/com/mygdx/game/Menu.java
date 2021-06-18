@@ -126,7 +126,7 @@ public class Menu {
         }
         public boolean isTouched(float x, float y){
             if(xPosition <= x && x <= xPosition + width && yPosition <= y && y <= yPosition + height){
-
+                Main.buttonPressed.play(1f);
                 return true;
             }
             return false;

@@ -125,6 +125,7 @@ public class Deck {
                 }
                 else{
                     cards.get(index).isReverse = true;
+                    CardGame.cardFlip.play(1f);
                     card.isReverse = true;
                     card.setAnimating(true);
                     cards.get(index).setAnimating(true);

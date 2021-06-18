@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.mygdx.game.Main;
 import com.mygdx.game.Unit;
 
 public class Upgrade_menu extends Unit {
@@ -101,6 +102,7 @@ public class Upgrade_menu extends Unit {
             if( timeLock <= System.currentTimeMillis() && xPosition <= x && x <= xPosition + width
                     && yPosition <= y && y <= yPosition + height) {
                 if(step < 10 && player_money >= money){
+                    Main.buttonPressed.play(1f);
                     timeLock = System.currentTimeMillis() + 500;
                     player_money -= money;
                     money *= 1.4;

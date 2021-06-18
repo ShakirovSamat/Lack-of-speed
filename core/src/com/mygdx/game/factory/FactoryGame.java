@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -40,6 +42,9 @@ public class FactoryGame implements Screen, InputProcessor {
     //Menu
     Menu menu;
 
+    Sound manholeOpen;
+    Music factoryGameMusic;
+
     float duration;
     long timeLock;
 
@@ -58,6 +63,11 @@ public class FactoryGame implements Screen, InputProcessor {
 
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
+
+        manholeOpen = Gdx.audio.newSound(Gdx.files.internal("sounds/manhole.mp3"));
+        factoryGameMusic = Gdx.audio.newMusic(Gdx.files.internal("music/factoryGameMusic.mp3"));
+        factoryGameMusic.setLooping(true);
+        factoryGameMusic.play();
 
         metal_button = new FactoryButton((int)(w / 15), (int)(w /15),(int)(w / 19.2), (int)(h / 24.6),
                 new Texture(Gdx.files.internal("Factory/buttons/metal_off.png")), new Texture(Gdx.files.internal("Factory/buttons/metal_on.png")));
@@ -141,12 +151,14 @@ public class FactoryGame implements Screen, InputProcessor {
         if(metal_button.isOpened){
             metal_manhole.draw(game.batch);
             if (metal_button.timeLock <= System.currentTimeMillis()){
+                manholeOpen.play(0.5f);
                 metal_button.isOpened = false;
             }
         }
         if(paper_button.isOpened){
             paper_manhole.draw(game.batch);
             if (paper_button.timeLock <= System.currentTimeMillis()){
+                manholeOpen.play(0.5f);
                 paper_button.isOpened = false;
             }
         }
@@ -155,12 +167,14 @@ public class FactoryGame implements Screen, InputProcessor {
 
 
             if (plastic_button.timeLock <= System.currentTimeMillis()){
+                manholeOpen.play(0.5f);
                 plastic_button.isOpened = false;
             }
         }
         if(glass_button.isOpened){
             glass_manhole.draw(game.batch);
             if (glass_button.timeLock <= System.currentTimeMillis()){
+                manholeOpen.play(0.5f);
                 glass_button.isOpened = false;
             }
         }
@@ -170,9 +184,11 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("metal")) {
                         score += 2;
-                        duration -= 0.1f;
+                        if(duration > 1.1){
+                            duration -= 0.1f;
+                        }
                     } else {
-                        score -= 1;
+                        score -= 3;
                         if(duration <= 2.92){
                             duration += 0.1f;
                         }
@@ -185,9 +201,11 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("glass")) {
                         score += 2;
-                        duration -= 0.1f;
+                        if(duration > 1.1){
+                            duration -= 0.1f;
+                        }
                     } else {
-                        score -= 1;
+                        score -= 3;
                         if(duration <= 2.92){
                             duration += 0.1f;
                         }
@@ -199,9 +217,11 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("plastic")) {
                         score += 2;
-                        duration -= 0.1f;
+                        if(duration > 1.1){
+                            duration -= 0.1f;
+                        }
                     } else {
-                        score -= 1;
+                        score -= 3;
                         if(duration <= 2.92){
                             duration += 0.1f;
                         }
@@ -213,9 +233,11 @@ public class FactoryGame implements Screen, InputProcessor {
                 if(!garbage.get(i).isFallen) {
                     if (garbage.get(i).type.equals("paper")) {
                         score += 2;
-                        duration -= 0.1f;
+                        if(duration > 1.1){
+                            duration -= 0.1f;
+                        }
                     } else {
-                        score -= 1;
+                        score -= 3;
                         if(duration <= 2.92){
                             duration += 0.1f;
                         }
@@ -233,7 +255,7 @@ public class FactoryGame implements Screen, InputProcessor {
                 } else if (score / 4 > 4) {
                     step += 4;
                 }
-                garbage.get(i).xPosition += (int) (w / (1920 / step));
+                garbage.get(i).xPosition += 1 + (int) (w / (1920 / step));
             }
             garbage.get(i).draw(game.batch);
             if (garbage.get(i).isFallen) {
@@ -297,12 +319,12 @@ public class FactoryGame implements Screen, InputProcessor {
 
     @Override
     public void pause() {
-
+        factoryGameMusic.pause();
     }
 
     @Override
     public void resume() {
-
+        factoryGameMusic.play();
     }
 
     @Override
@@ -312,7 +334,7 @@ public class FactoryGame implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        factoryGameMusic.dispose();
     }
 
     @Override
@@ -388,6 +410,7 @@ public class FactoryGame implements Screen, InputProcessor {
 
         public void isClicked(float x, float y, Main game){
             if(timeLock <= System.currentTimeMillis()){
+                manholeOpen.play(0.5f);
                 super.isClicked(x,y, game);
             }
         }

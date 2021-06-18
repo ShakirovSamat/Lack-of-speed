@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
  public class Car {
-    long timeLock;
+    public long timeLock;
 
     // Properties
     public int weight;
@@ -30,7 +30,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
     //Graphic
     public Sprite body, wheel;
-    int w,h;
+    public int w,h;
 
     public Car(float width, float height, float xPosition, float yPosition, int transmissions, int[] speedChange, int maxSpeed, int weight, String bodyPath, String wheelPath){
         w = Gdx.graphics.getWidth();

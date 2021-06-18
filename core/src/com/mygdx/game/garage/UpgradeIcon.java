@@ -23,6 +23,7 @@ public class UpgradeIcon extends Icon {
     }
 
     public void onClick(){
+        Main.buttonPressed.play(1f);
         upgrade_menu.opened = !upgrade_menu.opened;
     }
 }

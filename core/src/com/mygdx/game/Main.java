@@ -2,19 +2,24 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.mygdx.game.defeatWindow.DefeatWindow;
 import com.mygdx.game.menu.GameMenu;
+import com.mygdx.game.victoryWindow.VictoryWindow;
 
 
 public class Main extends Game {
    public SpriteBatch batch;
    public BitmapFont font;
    public BitmapFont font_speed, font_trans;
+
+   public static Sound buttonPressed;
 
     static int w,h;
     public static Animation<TextureRegion> slide;
@@ -26,6 +31,7 @@ public class Main extends Game {
 
         slide = getAnimation(5,4,"animations/slide_animation.png", 20f);
 
+        buttonPressed = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonPressed.mp3"));
         batch = new SpriteBatch();
         font = new BitmapFont();
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/speedometer.ttf"));
@@ -36,7 +42,7 @@ public class Main extends Game {
         font_speed = generator.generateFont(parameter);
         parameter.size = (int)(Gdx.graphics.getHeight() / 20.5);
         font_trans = generator.generateFont(parameter);
-        this.setScreen(new GameMenu(this));
+        this.setScreen(new VictoryWindow(this));
     }
 
     @Override

@@ -35,6 +35,7 @@ public class RaceIcon extends Icon {
     }
 
     public void onClick(){
+        Main.buttonPressed.play(1f);
         additionalMenu.opened = true;
     }
 

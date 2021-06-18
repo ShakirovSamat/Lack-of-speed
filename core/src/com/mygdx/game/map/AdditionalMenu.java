@@ -58,6 +58,7 @@ public class  AdditionalMenu extends Unit {
             float y  = Gdx.graphics.getHeight() - Gdx.input.getY();
             if(opened && xPosition <= x && x <= xPosition + width
                     && yPosition <= y && y <= yPosition + height) {
+                Main.buttonPressed.play(1f);
                 buttonDo(game);
             }
         }

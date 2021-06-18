@@ -28,6 +28,7 @@ public class Button extends Unit {
         if(xPosition <= x && x <= xPosition + width
                 && yPosition <= y && y <= yPosition + height) {
             timeLock = System.currentTimeMillis() + 300;
+            Main.buttonPressed.play(1f);
             onClick(game);
         }
     }

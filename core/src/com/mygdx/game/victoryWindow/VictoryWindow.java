@@ -33,7 +33,6 @@ public class VictoryWindow implements Screen, InputProcessor {
 
     long timeLock;
 
-    float alpha = 1;
 
     private Viewport viewport;
     private Camera camera;

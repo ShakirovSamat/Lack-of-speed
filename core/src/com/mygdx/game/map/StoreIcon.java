@@ -30,7 +30,9 @@ public class StoreIcon extends Icon {
         }
     }
 
-    public void onClick(){
+    public void onClick()
+    {
+        Main.buttonPressed.play(1f);
         additionalMenu.opened = true;
     }
 }

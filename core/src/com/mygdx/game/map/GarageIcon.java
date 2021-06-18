@@ -10,6 +10,7 @@ public class GarageIcon extends Icon {
         super(width, height, xPosition, yPosition, name, texture);
     }
     public void onClick(Main game){
+        Main.buttonPressed.play(1f);
         game.setScreen(new Garage(game));
     }
 }

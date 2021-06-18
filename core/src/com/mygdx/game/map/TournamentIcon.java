@@ -62,6 +62,7 @@ public class TournamentIcon extends Icon {
         }
     }
     public void onClick(){
+        Main.buttonPressed.play(1f);
         additionalMenu.opened = true;
     }
 }

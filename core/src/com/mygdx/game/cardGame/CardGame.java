@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -51,6 +53,9 @@ public class CardGame implements InputProcessor, Screen {
 	int score;
 	float time;
 	boolean isOver;
+
+	public static Sound cardFlip;
+	Music music;
 
 
 	public Animation<TextureRegion> getAnimation(int c, int r, String path){
@@ -102,6 +107,12 @@ public class CardGame implements InputProcessor, Screen {
 		viewport = new ScreenViewport(camera);
 
 		prefs = Gdx.app.getPreferences("data");
+
+		cardFlip = Gdx.audio.newSound(Gdx.files.internal("sounds/cardFlip.mp3"));
+		music = Gdx.audio.newMusic(Gdx.files.internal("music/cardGameMusic.mp3"));
+		music.setLooping(true);
+		music.setVolume(1f);
+		music.play();
 
 		Gdx.input.setInputProcessor(this);
 
@@ -267,6 +278,7 @@ public class CardGame implements InputProcessor, Screen {
 
 	@Override
 	public void resume() {
+		music.play();
 	}
 
 	@Override
@@ -276,11 +288,12 @@ public class CardGame implements InputProcessor, Screen {
 
 	@Override
 	public void dispose() {
-
+		music.dispose();
 	}
 
 	@Override
 	public void pause() {
+		music.pause();
 	}
 
 	@Override
@@ -320,6 +333,7 @@ public class CardGame implements InputProcessor, Screen {
 					if (!card.isPressed() && !card.isComplete && card.getX() - 1 < x && x < 1 + card.getX() + deck.getCards_width()
 							&& card.getY() - 1 < y && y < 1 + card.getY() + deck.getCards_height()) {
 						card.setPressed(true);
+						cardFlip.play(1f);
 						card.setAnimating(true);
 						deck.opened++;
 
