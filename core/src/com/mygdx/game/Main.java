@@ -42,7 +42,7 @@ public class Main extends Game {
         font_speed = generator.generateFont(parameter);
         parameter.size = (int)(Gdx.graphics.getHeight() / 20.5);
         font_trans = generator.generateFont(parameter);
-        this.setScreen(new VictoryWindow(this));
+        this.setScreen(new GameMenu(this));
     }
 
     @Override
